@@ -19,7 +19,7 @@ public class MyView extends View {
 //        Log.e("TAG", "TestButton dispatchTouchEvent-- return =" + dispatchTouchEvent);
 //        return dispatchTouchEvent;
         if(event.getAction()== MotionEvent.ACTION_DOWN){
-                        getParent().requestDisallowInterceptTouchEvent(true);
+//           getParent().requestDisallowInterceptTouchEvent(true);
             return true;
         }else{
             return false;
