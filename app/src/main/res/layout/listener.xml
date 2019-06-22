@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.keepon.eventdispatch.TestLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:tag="TestLinearLayout"
+              android:id="@+id/mylayout">
+	<com.keepon.eventdispatch.TestButton
+		android:enabled="false"
+		android:id="@+id/my_btn"
+		android:tag="TestButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="click TestButton"/>
+	<com.keepon.eventdispatch.MyView
+		android:id="@+id/myview"
+		android:tag="MyView"
+		android:layout_marginTop="20dp"
+		android:background="@color/material_blue_grey_800"
+		android:layout_width="match_parent"
+		android:layout_height="35dp"
+		android:text="click MyView"/>
+	<TextView
+		android:background="@color/button_material_light"
+		android:layout_marginTop="20dp"
+		android:id="@+id/tv"
+		android:tag="TextView"
+		android:gravity="center"
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
+		android:text="click TestView"/>
+</com.keepon.eventdispatch.TestLinearLayout>
