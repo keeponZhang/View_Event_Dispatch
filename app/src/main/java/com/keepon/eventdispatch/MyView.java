@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class MyView extends View {
-
+    //修改
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }

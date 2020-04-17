@@ -14,6 +14,7 @@ import com.keepon.customerviewdemo.R;
 
 
 public class ListenerActivity extends Activity implements View.OnTouchListener, View.OnClickListener {
+    //修改
     private LinearLayout mLayout;
     private TestButton   mButton;
     private MyView       mMyView;
