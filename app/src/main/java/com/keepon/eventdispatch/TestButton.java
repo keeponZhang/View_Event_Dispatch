@@ -6,11 +6,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 public class TestButton extends android.support.v7.widget.AppCompatButton {
-
+    //test2
+    //test3
     public TestButton(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
+    //test4
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         Log.e("TAG", "TestButton dispatchTouchEvent:" +event.getAction());

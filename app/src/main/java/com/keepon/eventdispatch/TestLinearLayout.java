@@ -10,7 +10,7 @@ public class TestLinearLayout extends LinearLayout {
     public TestLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
+    //test3
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         Log.e("TAG", "TestLinearLayout onInterceptTouchEvent-- action=" + ev.getAction());
