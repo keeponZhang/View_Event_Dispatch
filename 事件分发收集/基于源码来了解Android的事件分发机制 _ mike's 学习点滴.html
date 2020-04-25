@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<!-- saved from url=(0164)http://minjie.tech/2016/09/03/%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81%E6%9D%A5%E4%BA%86%E8%A7%A3Android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/ -->
+<html class="theme-next mist use-motion"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/jquery.fancybox.css" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/css" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/main.css" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="http://minjie.tech/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="网上已经有太多的关于Android事件分发机制的文章，而今天我写这遍文章，主要是想对这段时间的学习做个总结。Android是基于事件驱动的GUI系统，所以Android的事件分发机制跟其它的GUI系统是差不多的，所以了解了Android的事件分发机制基本上也就了解了其它的GUI系统的事件分发机制。由于我们只关注分发的机制和流程，所以我选择了Android 2.1 的源码，这个版本跟后面的版本的事件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于源码来了解Android的事件分发机制">
+<meta property="og:url" content="http://yoursite.com/2016/09/03/基于源码来了解Android的事件分发机制/index.html">
+<meta property="og:site_name" content="mike&#39;s 学习点滴">
+<meta property="og:description" content="网上已经有太多的关于Android事件分发机制的文章，而今天我写这遍文章，主要是想对这段时间的学习做个总结。Android是基于事件驱动的GUI系统，所以Android的事件分发机制跟其它的GUI系统是差不多的，所以了解了Android的事件分发机制基本上也就了解了其它的GUI系统的事件分发机制。由于我们只关注分发的机制和流程，所以我选择了Android 2.1 的源码，这个版本跟后面的版本的事件">
+<meta property="og:updated_time" content="2016-09-03T05:43:24.612Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于源码来了解Android的事件分发机制">
+<meta name="twitter:description" content="网上已经有太多的关于Android事件分发机制的文章，而今天我写这遍文章，主要是想对这段时间的学习做个总结。Android是基于事件驱动的GUI系统，所以Android的事件分发机制跟其它的GUI系统是差不多的，所以了解了Android的事件分发机制基本上也就了解了其它的GUI系统的事件分发机制。由于我们只关注分发的机制和流程，所以我选择了Android 2.1 的源码，这个版本跟后面的版本的事件">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 基于源码来了解Android的事件分发机制 | mike's 学习点滴 </title>
+<script type="text/javascript" async="" id="duoshuo-script" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/embed.js" charset="UTF-8"></script><style type="text/css">.fancybox-margin{margin-right:17px;}</style><link type="text/css" rel="stylesheet" href="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/embed.default.css"></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans" class="" style="padding-right: 320px;">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="http://minjie.tech/" class="brand" rel="start" style="opacity: 1;">
+      <span class="logo-line-before"><i class="" style="transform: translateX(100%);"></i></span>
+      <span class="site-title" style="opacity: 1; top: 0px;">mike's 学习点滴</span>
+      <span class="logo-line-after"><i class="" style="transform: translateX(-100%);"></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle" style="opacity: 1; top: 0px;">小小码农一枚</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home" style="opacity: 1; transform: translateY(0px);">
+          <a href="http://minjie.tech/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives" style="opacity: 1; transform: translateY(0px);">
+          <a href="http://minjie.tech/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags" style="opacity: 1; transform: translateY(0px);">
+          <a href="http://minjie.tech/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article" style="opacity: 1; display: block; transform: translateY(0px);">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                基于源码来了解Android的事件分发机制
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-03T13:42:12+08:00" content="2016-09-03">
+              2016-09-03
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="http://minjie.tech/2016/09/03/%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81%E6%9D%A5%E4%BA%86%E8%A7%A3Android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/03/基于源码来了解Android的事件分发机制/" itemprop="commentsCount">13条评论</span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>网上已经有太多的关于Android事件分发机制的文章，而今天我写这遍文章，主要是想对这段时间的学习做个总结。Android是基于事件驱动的GUI系统，所以Android的事件分发机制跟其它的GUI系统是差不多的，所以了解了Android的事件分发机制基本上也就了解了其它的GUI系统的事件分发机制。由于我们只关注分发的机制和流程，所以我选择了Android 2.1 的源码，这个版本跟后面的版本的事件分发机制的代码还是有很大区别的，但是主要的分发流程是不会变的。而且这个版本关于事件分发流程的代码相对于后面的版本少了很多噪音代码所以非常容易阅读的。还有网上的很多关于该类型的文章都是分2篇来讲解，一篇是介绍ViewGroup的分发一篇是View的分发。而我为了介绍分发的机制，需要来回在ViewGroup和View中做跳转，所以为了方便大家的阅读我决定写成一篇来介绍。</p>
+<p>这里我们假设有一个很简单的布局，一个父控件ViewGroup和一个子控件View。拿这种简单的布局来分析事件的分发机制已经足够了，很复杂的布局相对于简单的布局也就多了几次递归调用而已。通过网上的其它文章我们知道事件的分发机制都是先分发到父容器，然后父容器再分发到它的子控件，如果该子控件依然是一个容器控件的话，就会继续的分发下去，直到子控件不是一个容器控件为止。</p>
+<h2 id="ViewGroup的事件分发机制"><a href="http://minjie.tech/2016/09/03/%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81%E6%9D%A5%E4%BA%86%E8%A7%A3Android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/#ViewGroup的事件分发机制" class="headerlink" title="ViewGroup的事件分发机制"></a>ViewGroup的事件分发机制</h2><p>先贴上ViewGroup全部的dispatchTouchEvent方法的代码</p>
+<pre><code>public boolean dispatchTouchEvent(MotionEvent ev) {
+    final int action = ev.getAction();
+    final float xf = ev.getX();
+    final float yf = ev.getY();
+    final float scrolledXFloat = xf + mScrollX;
+    final float scrolledYFloat = yf + mScrollY;
+    final Rect frame = mTempRect;
+
+    boolean disallowIntercept = (mGroupFlags &amp; FLAG_DISALLOW_INTERCEPT) != 0;
+
+    if (action == MotionEvent.ACTION_DOWN) {
+        if (mMotionTarget != null) {
+            // this is weird, we got a pen down, but we thought it was
+            // already down!
+            // XXX: We should probably send an ACTION_UP to the current
+            // target.
+            mMotionTarget = null;
+        }
+        // If we're disallowing intercept or if we're allowing and we didn't
+        // intercept
+        if (disallowIntercept || !onInterceptTouchEvent(ev)) {
+            // reset this event's action (just to protect ourselves)
+            ev.setAction(MotionEvent.ACTION_DOWN);
+            // We know we want to dispatch the event down, find a child
+            // who can handle it, start with the front-most child.
+            final int scrolledXInt = (int) scrolledXFloat;
+            final int scrolledYInt = (int) scrolledYFloat;
+            final View[] children = mChildren;
+            final int count = mChildrenCount;
+            for (int i = count - 1; i &gt;= 0; i--) {
+                final View child = children[i];
+                if ((child.mViewFlags &amp; VISIBILITY_MASK) == VISIBLE
+                        || child.getAnimation() != null) {
+                    child.getHitRect(frame);
+                    if (frame.contains(scrolledXInt, scrolledYInt)) {
+                        // offset the event to the view's coordinate system
+                        final float xc = scrolledXFloat - child.mLeft;
+                        final float yc = scrolledYFloat - child.mTop;
+                        ev.setLocation(xc, yc);
+                        if (child.dispatchTouchEvent(ev))  {
+                            // Event handled, we have a target now.
+                            mMotionTarget = child;
+                            return true;
+                        }
+                        // The event didn't get handled, try the next view.
+                        // Don't reset the event's location, it's not
+                        // necessary here.
+                    }
+                }
+            }
+        }
+    }
+
+    boolean isUpOrCancel = (action == MotionEvent.ACTION_UP) ||
+            (action == MotionEvent.ACTION_CANCEL);
+
+    if (isUpOrCancel) {
+        // Note, we've already copied the previous state to our local
+        // variable, so this takes effect on the next event
+        mGroupFlags &amp;= ~FLAG_DISALLOW_INTERCEPT;
+    }
+
+    // The event wasn't an ACTION_DOWN, dispatch it to our target if
+    // we have one.
+    final View target = mMotionTarget;
+    if (target == null) {
+        // We don't have a target, this means we're handling the
+        // event as a regular view.
+        ev.setLocation(xf, yf);
+        return super.dispatchTouchEvent(ev);
+    }
+
+    // if have a target, see if we're allowed to and want to intercept its
+    // events
+    if (!disallowIntercept &amp;&amp; onInterceptTouchEvent(ev)) {
+        final float xc = scrolledXFloat - (float) target.mLeft;
+        final float yc = scrolledYFloat - (float) target.mTop;
+        ev.setAction(MotionEvent.ACTION_CANCEL);
+        ev.setLocation(xc, yc);
+        if (!target.dispatchTouchEvent(ev)) {
+            // target didn't handle ACTION_CANCEL. not much we can do
+            // but they should have.
+        }
+        // clear the target
+        mMotionTarget = null;
+        // Don't dispatch this event to our own view, because we already
+        // saw it when intercepting; we just want to give the following
+        // event to the normal onTouchEvent().
+        return true;
+    }
+
+    if (isUpOrCancel) {
+        mMotionTarget = null;
+    }
+
+    // finally offset the event to the target's coordinate system and
+    // dispatch the event.
+    final float xc = scrolledXFloat - (float) target.mLeft;
+    final float yc = scrolledYFloat - (float) target.mTop;
+    ev.setLocation(xc, yc);
+
+    return target.dispatchTouchEvent(ev);
+}
+</code></pre><p>我们来依次分析源码，我们先看看参数ev，这是一个MotionEvent对象，MotionEvent对象是对当前事件的封装。通过这个对象我们可以得到当前点击相对于父容器的位置（ getX()，getY() ）和相对屏幕左上角的位置（ getRawX()，getRawY() ）,还可以通过getAction()可以得到当前事件是一次ACTIONDOWN事件，还是ACTIONUP事件，或者是ACTIONMOVE。 当我们的手指点击屏幕的时候，会先触发ACTIONDOWN事件，如果移动的话会触发1到多次ACTIONMOVE事件，当手指离开屏幕的时候会触发ACTIONUP事件，如果被它父容器拦截干扰的话会触发ACTIONCANCEL事件(这个后面会做介绍)。一次事件序列是以ACTION_DOWN事件开始，以ACTIONUP事件或者 ACTIONCANCEL事件来结束。</p>
+<pre><code>final int action = ev.getAction();
+final float xf = ev.getX();
+final float yf = ev.getY();
+final float scrolledXFloat = xf + mScrollX;
+final float scrolledYFloat = yf + mScrollY;
+</code></pre><p>xf，yf是点击的位置相对于它的父容器的左上角的坐标。scrolledXFloat，scrolledYFloat 是点击的位置相对于父容器左上角的坐标加上父容器内部滚动的偏移量。mScrollX和mScrollY默认是0。</p>
+<pre><code>boolean disallowIntercept = (mGroupFlags &amp; FLAG_DISALLOW_INTERCEPT) != 0;
+if (action == MotionEvent.ACTION_DOWN) {
+    if (mMotionTarget != null) {
+       mMotionTarget = null;
+    }
+    ...
+}
+</code></pre><p>disallowIntercept 这个变量是判断当前控件是否支持拦截事件，只对父容器有用，默认是支持拦截的。如果当前是ACTIONDOWN事件,先清空 mMotionTarget这个View对象。mMotionTarget对象表示了该父容器的哪个子控件处理了ACTIONDOWN事件。然后在后续的ACTION_MOVE，ACTION_UP事件直接调用mMotionTarget对象的dispatchTouchEvent方法。</p>
+<pre><code>if (disallowIntercept || !onInterceptTouchEvent(ev)) {
+     ev.setAction(MotionEvent.ACTION_DOWN);
+     final int scrolledXInt = (int) scrolledXFloat;
+    final int scrolledYInt = (int) scrolledYFloat;
+    final View[] children = mChildren;
+    final int count = mChildrenCount;
+    for (int i = count - 1; i &gt;= 0; i--) {
+        final View child = children[i];
+        if ((child.mViewFlags &amp; VISIBILITY_MASK) == VISIBLE
+                || child.getAnimation() != null) {
+            child.getHitRect(frame);
+            if (frame.contains(scrolledXInt, scrolledYInt)) {
+                final float xc = scrolledXFloat - child.mLeft;
+                final float yc = scrolledYFloat - child.mTop;
+                ev.setLocation(xc, yc);
+                if (child.dispatchTouchEvent(ev))  {
+                    mMotionTarget = child;
+                    return true;
+                }
+
+            }
+        }
+    }
+}
+</code></pre><p>最外层的if语句会判断当前容器控件是否支持事件拦截或者当前当前控件的onInterceptTouchEvent方法是否返回flase。在没有被拦截的情况下，然后for循环mChildren这个数组对象，这个数组包含了当前父容器包含的子控件对象</p>
+<pre><code>frame.contains(scrolledXInt, scrolledYInt)
+</code></pre><p>这行代码来判断当前点击是位置是否在该子控件的Rect区域里面，如果在的话，该行代码会返回true。</p>
+<pre><code>final float xc = scrolledXFloat - child.mLeft;
+final float yc = scrolledYFloat - child.mTop;
+ev.setLocation(xc, yc);
+if (child.dispatchTouchEvent(ev))  {
+    mMotionTarget = child;
+    return true;
+}
+</code></pre><p>xc，yc表示当前点击的位置相对于当前遍历的子控件的左上角的坐标。然后把当前位置赋值给ev变量，然后把ev变量作为参数调用子控件的dispatchTouchEvent对象。由于这个子控件是个View对象，所以我们继续看View的dispatchTouchEvent方法。</p>
+<h2 id="View的事件分发机制"><a href="http://minjie.tech/2016/09/03/%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81%E6%9D%A5%E4%BA%86%E8%A7%A3Android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/#View的事件分发机制" class="headerlink" title="View的事件分发机制"></a>View的事件分发机制</h2><p>首先我们贴上View的dispatchTouchEvent方法的代码</p>
+<pre><code>public boolean dispatchTouchEvent(MotionEvent event) {
+    if (mOnTouchListener != null &amp;&amp; (mViewFlags &amp; ENABLED_MASK) == ENABLED &amp;&amp;
+            mOnTouchListener.onTouch(this, event)) {
+        return true;
+    }
+    return onTouchEvent(event);
+}
+</code></pre><p>View的dispatchTouchEvent方法相对于ViewGroup的dispatchTouchEvent方法还是很简单的。从上面分析的ViewGroup的dispatchTouchEvent方法我们知道，该方法参数是通过父容器传过来的。方法首先通过判断mOnTouchListener是否为null，这个mOnTouchListener对象是通过View对象的setOnTouchListener方法传递进来的，也就是判断当前View对象是否注册了Touch事件的事件监听器。如果注册了该事件，表示mOnTouchListener!=null。然后判断该View控件的是否设置enabled这个属性，如果前面2个条件都为true的话，然后会调用mOnTouchListener这个事件监听器的onTouch方法。如果该方法返回true就退出dispatchTouchEvent方法。如果返回false就接着调用View的onTouchEvent的方法。先看看View的onTouchEvent方法。先贴出整个View的onTouchEvent方法</p>
+<pre><code>public boolean onTouchEvent(MotionEvent event) {
+    final int viewFlags = mViewFlags;
+
+    if ((viewFlags &amp; ENABLED_MASK) == DISABLED) {
+        // A disabled view that is clickable still consumes the touch
+        // events, it just doesn't respond to them.
+        return (((viewFlags &amp; CLICKABLE) == CLICKABLE ||
+                (viewFlags &amp; LONG_CLICKABLE) == LONG_CLICKABLE));
+    }
+
+    if (mTouchDelegate != null) {
+        if (mTouchDelegate.onTouchEvent(event)) {
+            return true;
+        }
+    }
+
+    if (((viewFlags &amp; CLICKABLE) == CLICKABLE ||
+            (viewFlags &amp; LONG_CLICKABLE) == LONG_CLICKABLE)) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_UP:
+                if ((mPrivateFlags &amp; PRESSED) != 0) {
+                    // take focus if we don't have it already and we should in
+                    // touch mode.
+                    boolean focusTaken = false;
+                    if (isFocusable() &amp;&amp; isFocusableInTouchMode() &amp;&amp; !isFocused()) {
+                        focusTaken = requestFocus();
+                    }
+
+                    if (!mHasPerformedLongPress) {
+                        // This is a tap, so remove the longpress check
+                        if (mPendingCheckForLongPress != null) {
+                            removeCallbacks(mPendingCheckForLongPress);
+                        }
+
+                        // Only perform take click actions if we were in the pressed state
+                        if (!focusTaken) {
+                            performClick();
+                        }
+                    }
+
+                    if (mUnsetPressedState == null) {
+                        mUnsetPressedState = new UnsetPressedState();
+                    }
+
+                    if (!post(mUnsetPressedState)) {
+                        // If the post failed, unpress right now
+                        mUnsetPressedState.run();
+                    }
+                }
+                break;
+
+            case MotionEvent.ACTION_DOWN:
+                mPrivateFlags |= PRESSED;
+                refreshDrawableState();
+                if ((mViewFlags &amp; LONG_CLICKABLE) == LONG_CLICKABLE) {
+                    postCheckForLongClick();
+                }
+                break;
+
+            case MotionEvent.ACTION_CANCEL:
+                mPrivateFlags &amp;= ~PRESSED;
+                refreshDrawableState();
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                final int x = (int) event.getX();
+                final int y = (int) event.getY();
+
+                // Be lenient about moving outside of buttons
+                int slop = ViewConfiguration.get(mContext).getScaledTouchSlop();
+                if ((x &lt; 0 - slop) || (x &gt;= getWidth() + slop) ||
+                        (y &lt; 0 - slop) || (y &gt;= getHeight() + slop)) {
+                    // Outside button
+                    if ((mPrivateFlags &amp; PRESSED) != 0) {
+                        // Remove any future long press checks
+                        if (mPendingCheckForLongPress != null) {
+                            removeCallbacks(mPendingCheckForLongPress);
+                        }
+
+                        // Need to switch from pressed to not pressed
+                        mPrivateFlags &amp;= ~PRESSED;
+                        refreshDrawableState();
+                    }
+                } else {
+                    // Inside button
+                    if ((mPrivateFlags &amp; PRESSED) == 0) {
+                        // Need to switch from not pressed to pressed
+                        mPrivateFlags |= PRESSED;
+                        refreshDrawableState();
+                    }
+                }
+                break;
+        }
+        return true;
+    }
+
+    return false;
+}
+</code></pre><p>方法的开始处判断当前控件的enabled状态，如果值是DISABLED的话，再判断当前的CLICKABLE和LONG_CLICKABLE 的值。我们选重点看 </p>
+<pre><code>if ((viewFlags &amp; ENABLED_MASK) == DISABLED) {
+        // A disabled view that is clickable still consumes the touch
+        // events, it just doesn't respond to them.
+        return (((viewFlags &amp; CLICKABLE) == CLICKABLE ||
+                (viewFlags &amp; LONG_CLICKABLE) == LONG_CLICKABLE));
+    }
+
+
+if (((viewFlags &amp; CLICKABLE) == CLICKABLE ||
+            (viewFlags &amp; LONG_CLICKABLE) == LONG_CLICKABLE)) {
+
+        ...
+
+        return true;
+}
+</code></pre><p>通过上面这几句代码我们可以看出<strong>只要当前控件的CLICKABLE或者LONG_CLICKABLE为true，该onTouchEvent方法就会返回true</strong>。继续分析View的onTouchEvent方法，里面有个switch语句，来判断当前事件是ACTIONUP还是ACTIONDOWN事件或者其它的。因为当前从父容器分发过来的是ACTIONDOWN事件，所以我们直接看 case 是 MotionEvent.ACTIONDOWN的分支。</p>
+<pre><code>case MotionEvent.ACTION_DOWN:
+                mPrivateFlags |= PRESSED;
+                refreshDrawableState();
+                if ((mViewFlags &amp; LONG_CLICKABLE) == LONG_CLICKABLE) {
+                    postCheckForLongClick();
+                }
+                break;
+</code></pre><p>一开始先设置当前的状态为PRESSED。然后调用refreshDrawableState()方法来设置当前View的DrawableState状态， 然后判断当前View的是否支持长按事件，如果支持的话，调用postCheckForLongClick方法。</p>
+<pre><code>private void postCheckForLongClick() {
+    mHasPerformedLongPress = false;
+
+    if (mPendingCheckForLongPress == null) {
+        mPendingCheckForLongPress = new CheckForLongPress();
+    }
+    mPendingCheckForLongPress.rememberWindowAttachCount();
+    postDelayed(mPendingCheckForLongPress, ViewConfiguration.getLongPressTimeout());
+}
+</code></pre><p>通过postDelayed这个方法我们可以看出是将mPendingCheckForLongPress这个消息post到消息队列中。ViewConfiguration.getLongPressTimeout()的值是500，也就是说500ms之后，执行mPendingCheckForLongPress这个消息。我们继续看mPendingCheckForLongPress这个消息。mPendingCheckForLongPress是个Runnable对象，我们直接看这个Runnable对象的run方法</p>
+<pre><code>public void run() {
+    if (isPressed() &amp;&amp; (mParent != null)
+            &amp;&amp; mOriginalWindowAttachCount == mWindowAttachCount) {
+        if (performLongClick()) {
+            mHasPerformedLongPress = true;
+        }
+    }
+}
+</code></pre><p>方法内部会调用performLongClick方法，我们进入到performLongClick方法</p>
+<pre><code>public boolean performLongClick() {
+    sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
+
+    boolean handled = false;
+    if (mOnLongClickListener != null) {
+        handled = mOnLongClickListener.onLongClick(View.this);
+    }
+    if (!handled) {
+        handled = showContextMenu();
+    }
+    if (handled) {
+        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+    }
+    return handled;
+}
+</code></pre><p>该方法里面的mOnLongClickListener就是外部给View注册的长按事件监听器。通过这几段代码我们知道了给View注册的onLongClick事件是如何执行的。也就是长按View控件500ms之后，会触发onLongClick事件，前提是该View的LONG_CLICKABLE为true。 </p>
+<p>分析完了View的onTouchEvent中的的ACTION_DOWN分支，我们返回到ViewGroup的dispatchTouchEvent方法中，</p>
+<pre><code>if (child.dispatchTouchEvent(ev))  {
+            // Event handled, we have a target now.
+            mMotionTarget = child;
+            return true;
+}
+</code></pre><p>通过分析View的dispatchTouchEvent方法我们知道，<strong>一个控件注册了OnTouchListener事件，且该事件中的OnTouch方法返回true或者该child控件的CLICKABLE或者LONG_CLICKABLE为true，<br>child.dispatchTouchEvent(ev) 这个方法调用就会返回true</strong>。然后将该child控件赋值给mMotionTarget对象，方便后续的处理。</p>
+<p>通过ViewGroup和View 这2个类的dispatchTouchEvent方法我们分析完了ACTIONDOWN事件，接着再分析后续的事件序列：ACTIONMOVE，ACTIONUP，ACTIONCANCEL。我们接着看ViewGroup的dispatchTouchEvent方法的代码。</p>
+<pre><code>final View target = mMotionTarget;
+if (target == null) {
+    // We don't have a target, this means we're handling the
+    // event as a regular view.
+    ev.setLocation(xf, yf);
+    return super.dispatchTouchEvent(ev);
+}
+</code></pre><p>先把mMotionTarget这个对象赋值给target这个局部变量，然后再判断是否为null。如果为null的话，表示没有哪个子控件会处理ACTION_DOWN事件，出现这种情况的原因是</p>
+<p>1.该点击到的子控件的clickable和longClickable都为false，且该控件没有注册OnTouchLister事件或者注册了但是OnTouch方法返回false，通俗点就是说没有哪个事件对ACTIONDOWN事件感兴趣。</p>
+<p>2.父容器拦截了ACTIONDOWN事件，也就是 disallowIntercept返回false且容器控件的onInterceptTouchEvent方法返回true。</p>
+<p>只有满足了1或者2这个条件，才会出现父容器的mMotionTarget对象为null。通过 return super.dispatchTouchEvent(ev);  我们可以看出，<strong>如果子控件没有处理该事件，父容器会自己处理该事件</strong>，处理流程参考上面的View的dispatchTouchEvent方法中的流程。接着往下看</p>
+<pre><code>if (!disallowIntercept &amp;&amp; onInterceptTouchEvent(ev)) {
+
+    final float xc = scrolledXFloat - (float) target.mLeft;
+    final float yc = scrolledYFloat - (float) target.mTop;
+    ev.setAction(MotionEvent.ACTION_CANCEL);
+    ev.setLocation(xc, yc);
+
+    if (!target.dispatchTouchEvent(ev)) {
+        // target didn't handle ACTION_CANCEL. not much we can do
+        // but they should have.
+    }
+
+    mMotionTarget = null;
+    return true;
+}
+</code></pre><p>这个if语句表示该父容器控件拦截了当前事件。然后把当前的事件的类型改为ACTIONCANCEL，然后调用子控件dispatchTouchEvent的方法，通知子控件该事件序列已经被取消了。再将mMotionTarget置为null，这表明<strong>在该次事件序列中这是最后一次把事件分发到子控件</strong>，后面产生的MOVE或者UP事件已经跟子控件没有关系了。最后 return true。</p>
+<p>通过上面的这个 if 语句我们可以得出：</p>
+<blockquote>
+<p>方法既然能运行到这里表示该拦截不是发生在ACTION_DOWN事件中。如果发生在ACTION_DOWN事件中，那么mMotionTarget就为null，如果mMotionTarget为null，在前面的if (target == null)  就会被拦截掉了。既然能运行到这个地方就表示mMotionTarget不为null，也就说明了ACTION_DOWN事件没有被拦截，而是后续ACTION_MOVE或者ACTION_CANCEL被拦截了。</p>
+</blockquote>
+<p>通过方法的最后面的一句 return target.dispatchTouchEvent(ev);  我们看出后续的事件序列会被直接分发到在ACTIONDOWN事件中的设置的mMotionTarget子控件中做继续处理。我们再接着分析View的OnTouchEvent方法对ACTIONMOVE事件和ACTIONUP事件的处理，我们先看ACTION_MOVE分支的代码</p>
+<pre><code>case MotionEvent.ACTION_MOVE:
+                final int x = (int) event.getX();
+                final int y = (int) event.getY();
+
+                // Be lenient about moving outside of buttons
+                int slop = ViewConfiguration.get(mContext).getScaledTouchSlop();
+                if ((x &lt; 0 - slop) || (x &gt;= getWidth() + slop) ||
+                        (y &lt; 0 - slop) || (y &gt;= getHeight() + slop)) {
+                    // Outside button
+                    if ((mPrivateFlags &amp; PRESSED) != 0) {
+                        // Remove any future long press checks
+                        if (mPendingCheckForLongPress != null) {
+                            removeCallbacks(mPendingCheckForLongPress);
+                        }
+
+                        // Need to switch from pressed to not pressed
+                        mPrivateFlags &amp;= ~PRESSED;
+                        refreshDrawableState();
+                    }
+                } else {
+                    // Inside button
+                    if ((mPrivateFlags &amp; PRESSED) == 0) {
+                        // Need to switch from not pressed to pressed
+                        mPrivateFlags |= PRESSED;
+                        refreshDrawableState();
+                    }
+                }
+                break;
+</code></pre><p>通过x,y记录当前的触摸的位置，ViewConfiguration.get(mContext).getScaledTouchSlop() 这条语句返回的是16，就是说slop的值是16。</p>
+<pre><code>if ((x &lt; 0 - slop) || (x &gt;= getWidth() + slop) ||
+                        (y &lt; 0 - slop) || (y &gt;= getHeight() + slop)) {
+</code></pre><p>这条if语句是判断当前触摸的位置有没有超过当前View的边境16个像素，在16像素以内说明你当前手指还没有离开当前view，否则说明你手指已经离开了当前View的边境。如果move出了控件的范围，会移除消息队列中的长按事件的这条消息。然后移除PRESSED状态。</p>
+<p>接着再分析ActionUp事件，我们直接进入到View的onTouchEvent方法中来分析ACTION_UP事件</p>
+<pre><code>case MotionEvent.ACTION_UP:
+                if ((mPrivateFlags &amp; PRESSED) != 0) {
+                    // take focus if we don't have it already and we should in
+                    // touch mode.
+                    boolean focusTaken = false;
+                    if (isFocusable() &amp;&amp; isFocusableInTouchMode() &amp;&amp; !isFocused()) {
+                        focusTaken = requestFocus();
+                    }
+
+                    if (!mHasPerformedLongPress) {
+                        // This is a tap, so remove the longpress check
+                        if (mPendingCheckForLongPress != null) {
+                            removeCallbacks(mPendingCheckForLongPress);
+                        }
+
+                        // Only perform take click actions if we were in the pressed state
+                        if (!focusTaken) {
+                            performClick();
+                        }
+                    }
+
+                    if (mUnsetPressedState == null) {
+                        mUnsetPressedState = new UnsetPressedState();
+                    }
+
+                    if (!post(mUnsetPressedState)) {
+                        // If the post failed, unpress right now
+                        mUnsetPressedState.run();
+                    }
+                }
+                break;
+</code></pre><p>一开始会判断当前是控件的状态是否是PRESSED状态，从ActionDown和ActionMove知道，当前的状态是PRESSED状态的。然后在判断当前控件是否获得支持获得焦点，如果支持的话且没有焦点的话，使当前的控件获得焦点。然后判断是否已经执行了长按事件，如果没有执行的话且已经长按的消息不为空，会将消息队列中长按消息移除。然后执行performClick方法，先看看performClick的方法</p>
+<pre><code>public boolean performClick() {
+    sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);
+
+    if (mOnClickListener != null) {
+        playSoundEffect(SoundEffectConstants.CLICK);
+        mOnClickListener.onClick(this);
+        return true;
+    }
+
+    return false;
+}
+</code></pre><p>mOnClickListener变量就是为当前View对象注册的ClickListener这个Click事件监听器。如果不为null的话，就执行mOnClickListener对象中onClick方法。</p>
+<h2 id="问题解答"><a href="http://minjie.tech/2016/09/03/%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81%E6%9D%A5%E4%BA%86%E8%A7%A3Android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/#问题解答" class="headerlink" title="问题解答"></a>问题解答</h2><h3 id="同时为View注册了OnTouchListener，OnLongClickListener，OnClickListener这三个事件监听器，这三个监听器被触发执行的先后顺序"><a href="http://minjie.tech/2016/09/03/%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81%E6%9D%A5%E4%BA%86%E8%A7%A3Android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/#同时为View注册了OnTouchListener，OnLongClickListener，OnClickListener这三个事件监听器，这三个监听器被触发执行的先后顺序" class="headerlink" title="同时为View注册了OnTouchListener，OnLongClickListener，OnClickListener这三个事件监听器，这三个监听器被触发执行的先后顺序"></a>同时为View注册了OnTouchListener，OnLongClickListener，OnClickListener这三个事件监听器，这三个监听器被触发执行的先后顺序</h3><p>顺序是</p>
+<p><strong>OnTouchListener&gt;OnLongClickListener&gt;OnClickListener</strong></p>
+<p>前2个事件监听器的回调方法的返回类型都是boolean，如果前面的方法返回true的话，后来的就不会去执行了。我来解释一下为什么，前面已经说过在View的dispatchTouchEvent方法中，会先执行注册的OnTouchListener的OnTouch回调方法，如果返回true的话，dispatchTouchEvent方法就会直接返回true，后面的onTouchEvent方法是不会执行的，而OnLongClickListener和<br>OnClickListener这2个事件监听器的触发是在onTouchEvent方法中触发的。 所以OnTouch方法返回的true的话，后面的2个事件都不会被触发。那OnLongClickListener的回调方法的返回值时如何影响到OnClickListener的执行的呢，我们再看看长按消息的代码</p>
+<pre><code>class CheckForLongPress implements Runnable {
+
+    public void run() {
+        ...
+        if (performLongClick()) {
+            mHasPerformedLongPress = true;
+        }
+
+           ...
+}
+</code></pre><p>performLongClick方法就会调用onLongClick事件中的回调方法，如果返回true的话mHasPerformedLongPress就为true。我们再看View的onTouchEvent方法中的MotionEvent.ACTION_UP这个分支的代码</p>
+<pre><code>case MotionEvent.ACTION_UP:
+
+         ...
+        if (!mHasPerformedLongPress) {
+            // This is a tap, so remove the longpress check
+           ...
+            // Only perform take click actions if we were in the pressed state
+            if (!focusTaken) {
+                performClick();
+            }
+        }
+        ...
+    }
+    break;
+</code></pre><p>可以看出mHasPerformedLongPress为true的话，就不会执行performClick这个方法，所以也就不会执行OnClick事件中的回调方法了。</p>
+<h3 id="父容器和子控件都注册了OnTouchListener事件监听器的问题"><a href="http://minjie.tech/2016/09/03/%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81%E6%9D%A5%E4%BA%86%E8%A7%A3Android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/#父容器和子控件都注册了OnTouchListener事件监听器的问题" class="headerlink" title="父容器和子控件都注册了OnTouchListener事件监听器的问题"></a>父容器和子控件都注册了OnTouchListener事件监听器的问题</h3><p>还有一个问题，如果同时给父子容器注册了OnTouch事件的监听器，当触摸子控件的时候，为什么父容器的OnTouch事件监听器没有被触发？</p>
+<p>我们来继续回到ViewGroup的dispatchTouchEvent方法的代码中，我们看看</p>
+<pre><code>if (action == MotionEvent.ACTION_DOWN) {
+    ...    
+        if (child.dispatchTouchEvent(ev))  {
+            // Event handled, we have a target now.
+            mMotionTarget = child;
+            return true;
+        }
+    ...           
+}
+
+
+...
+
+final View target = mMotionTarget;
+    if (target == null) {
+        // We don't have a target, this means we're handling the
+        // event as a regular view.
+        ev.setLocation(xf, yf);
+        return super.dispatchTouchEvent(ev);
+    }
+
+
+...
+return target.dispatchTouchEvent(ev);
+</code></pre><p>通过这几处关键代码我们知道只有当target == null的时候，才会调用当前容器控件自己的dispatchTouchEvent，不然会调用target.dispatchTouchEvent(ev)。</p>
+<p>文章前面我们说过，在child.dispatchTouchEvent(ev)方法中，当child控件的clickable或者longClickable为true 或者注册的OnTouch事件的回调方法返回true的情况下，child.dispatchTouchEvent(ev)的方法就会返回true，如果返回true的话，mMotionTarget就不会null，所以就不会调用super.dispatchTouchEvent(ev)这个方法来触发自己的事件监听器。</p>
+<p><strong>如何父子控件注册的OnTouchListener事件监听器都会被执行</strong></p>
+<p>我们可以给子控件的CLICKABLE和LONG_CLICKABLE都设置为false的情况下，且子控件的OnTouchListener的OnTouch方法返回false，这样父子控件注册的事件监听器都会被触发执行。</p>
+<p><strong>如何只触发父容器的注册的OnTouchListener事件监听器，而不触发子控件注册的OnTouchListener事件监听器</strong></p>
+<p>我们可以重写父容器的onInterceptTouchEvent(MotionEvent ev)方法，让它返回true，表示该父容器已经拦截了事件的分发使之不会被传递到子控件中。</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="http://minjie.tech/2016/07/30/Android-Service-%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="next" title="Android Service 的启动过程的源码分析">
+                <i class="fa fa-chevron-left"></i> Android Service 的启动过程的源码分析
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="http://minjie.tech/2016/12/29/java%E4%B8%ADprotected%E7%9A%84%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90/" rel="prev" title="java中protected的访问权限">
+                java中protected的访问权限 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/03/基于源码来了解Android的事件分发机制/" data-title="基于源码来了解Android的事件分发机制" data-url="http://yoursite.com/2016/09/03/基于源码来了解Android的事件分发机制/" id="ds-thread">
+      <div id="ds-reset"><div class="ds-meta" style="display: none;"><a href="javascript:void(0)" class="ds-like-thread-button ds-rounded"><span class="ds-icon ds-icon-heart"></span> <span class="ds-thread-like-text">喜欢</span><span class="ds-thread-cancel-like">取消喜欢</span></a><span class="ds-like-panel"></span></div><div class="ds-rounded" id="ds-hot-posts"><div class="ds-header ds-gradient-bg">被顶起来的评论</div><ul><li class="ds-post" data-post-id="6328222621427041025"><div class="ds-post-self" data-post-id="6328222621427041025" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6273341874660967170"><a rel="nofollow author" target="_blank" href="javascript:void(0)" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6273341874660967170&#39;;" title="蓝色山竹"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/0" alt="蓝色山竹"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="javascript:void(0)" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6273341874660967170&#39;;" rel="nofollow" target="_blank" data-user-id="6273341874660967170">蓝色山竹</a></div><p>好！看了楼主的文章一语理清了我的思路！赞</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-09T14:55:46+08:00" title="2016年9月9日 下午2:55:46">2016年9月9日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶(2)</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6326091567413068545"><div class="ds-post-self" data-post-id="6326091567413068545" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6326091466259039000"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/100" alt="jessie"></div><div class="ds-comment-body"><div class="ds-comment-header"><span class="ds-user-name" data-user-id="6326091466259039000" data-qqt-account="">jessie</span></div><p>不错！！！！</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-03T21:06:11+08:00" title="2016年9月3日 下午9:06:11">2016年9月3日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶(2)</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li></ul></div><div class="ds-comments-info"><div class="ds-sort"><a class="ds-order-desc">最新</a><a class="ds-order-asc ds-current">最早</a><a class="ds-order-hot">最热</a></div><ul class="ds-comments-tabs"><li class="ds-tab"><a class="ds-comments-tab-duoshuo ds-current" href="javascript:void(0);"><span class="ds-highlight">13</span>条评论</a></li>  </ul></div><ul class="ds-comments"><li class="ds-post" data-post-id="6326091567413068545"><div class="ds-post-self" data-post-id="6326091567413068545" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6326091466259039000"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/100" alt="jessie"></div><div class="ds-comment-body"><div class="ds-comment-header"><span class="ds-user-name" data-user-id="6326091466259039000" data-qqt-account="">jessie</span></div><p>不错！！！！</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-03T21:06:11+08:00" title="2016年9月3日 下午9:06:11">2016年9月3日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶(2)</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6326284972244075265"><div class="ds-post-self" data-post-id="6326284972244075265" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6326284727758095000"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/100(1)" alt="sky"></div><div class="ds-comment-body"><div class="ds-comment-header"><span class="ds-user-name" data-user-id="6326284727758095000" data-qqt-account="">sky</span></div><p>写的真的不错，加油！</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-04T09:36:42+08:00" title="2016年9月4日 上午9:36:42">2016年9月4日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6326740741431231233"><div class="ds-post-self" data-post-id="6326740741431231233" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6326740697072272130"><a rel="nofollow author" target="_blank" href="http://weibo.com/5648666223" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6326740697072272130&#39;;" title="WWDC2018"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/default_avatar_male_50.gif" alt="WWDC2018"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://weibo.com/5648666223" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6326740697072272130&#39;;" rel="nofollow" target="_blank" data-user-id="6326740697072272130">WWDC2018</a></div><p>666八错八错！！</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-05T15:05:19+08:00" title="2016年9月5日 下午3:05:19">2016年9月5日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6326741850786890498"><div class="ds-post-self" data-post-id="6326741850786890498" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6326741788224652000"><a rel="nofollow author" target="_blank" href="javascript:void(0)" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6326741788224652000&#39;;" title="上中下心"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/0(1)" alt="上中下心"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="javascript:void(0)" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6326741788224652000&#39;;" rel="nofollow" target="_blank" data-user-id="6326741788224652000">上中下心</a></div><p>不错</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-05T15:09:37+08:00" title="2016年9月5日 下午3:09:37">2016年9月5日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6326747748804592385"><div class="ds-post-self" data-post-id="6326747748804592385" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6326747407312749314"><a rel="nofollow author" target="_blank" href="http://t.qq.com/doublefbi" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6326747407312749314&#39;;" title="幻影刺客"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/50" alt="幻影刺客"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://t.qq.com/doublefbi" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6326747407312749314&#39;;" rel="nofollow" target="_blank" data-user-id="6326747407312749314">幻影刺客</a></div><p>大神 写的博客 博 大 精 深 解析到位。</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-05T15:32:30+08:00" title="2016年9月5日 下午3:32:30">2016年9月5日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6326774800307979009"><div class="ds-post-self" data-post-id="6326774800307979009" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6326774762789930000"><a rel="nofollow author" target="_blank" href="http://t.qq.com/xiaomi8621" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6326774762789930000&#39;;" title="小幂"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/50(1)" alt="小幂"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://t.qq.com/xiaomi8621" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6326774762789930000&#39;;" rel="nofollow" target="_blank" data-user-id="6326774762789930000">小幂</a></div><p>大牛啊，深藏不漏啊！</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-05T17:17:29+08:00" title="2016年9月5日 下午5:17:29">2016年9月5日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6326776629309735682"><div class="ds-post-self" data-post-id="6326776629309735682" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6326776013875316000"><a rel="nofollow author" target="_blank" href="http://t.qq.com/xiaosan_home" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6326776013875316000&#39;;" title="开始"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/100(2)" alt="开始"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://t.qq.com/xiaosan_home" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6326776013875316000&#39;;" rel="nofollow" target="_blank" data-user-id="6326776013875316000">开始</a></div><p>牛逼啊, 你诈能这么牛呢</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-05T17:24:34+08:00" title="2016年9月5日 下午5:24:34">2016年9月5日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6326778607725183746"><div class="ds-post-self" data-post-id="6326778607725183746" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6326778355576210000"><a rel="nofollow author" target="_blank" href="javascript:void(0)" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6326778355576210000&#39;;" title="刘玲"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/0(2)" alt="刘玲"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="javascript:void(0)" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6326778355576210000&#39;;" rel="nofollow" target="_blank" data-user-id="6326778355576210000">刘玲</a></div><p>大神，厉害拜服 <img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/tootha_org.gif" alt="[嘻嘻]" title="[嘻嘻]" class="ds-smiley"> 加油加油</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-05T17:32:15+08:00" title="2016年9月5日 下午5:32:15">2016年9月5日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6327020907751539458"><div class="ds-post-self" data-post-id="6327020907751539458" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6327020210784044000"><a rel="nofollow author" target="_blank" href="http://t.qq.com/leanchou-z" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6327020210784044000&#39;;" title="周亮"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/50(2)" alt="周亮"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://t.qq.com/leanchou-z" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6327020210784044000&#39;;" rel="nofollow" target="_blank" data-user-id="6327020210784044000">周亮</a></div><p>很清楚，解决了我一直疑惑的问题。</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-06T09:12:30+08:00" title="2016年9月6日 上午9:12:30">2016年9月6日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6327431338559275777"><div class="ds-post-self" data-post-id="6327431338559275777" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6327428092885206000"><a rel="nofollow author" target="_blank" href="javascript:void(0)" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6327428092885206000&#39;;" title="龚海兵"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/0(3)" alt="龚海兵"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="javascript:void(0)" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6327428092885206000&#39;;" rel="nofollow" target="_blank" data-user-id="6327428092885206000">龚海兵</a></div><p>博主对事件分发机制的理解很深入，看完全篇之后，使我对容器下所注册的事件监听器的执行条件有了更加深入的了解，很多原先不太明白的地方一下子豁然开朗</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-07T11:45:11+08:00" title="2016年9月7日 上午11:45:11">2016年9月7日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6327431875723789058"><div class="ds-post-self" data-post-id="6327431875723789058" data-thread-id="6325977738318447362" data-root-id="6327020907751539458" data-source="duoshuo"><div class="ds-avatar" data-user-id="7097016"><a rel="nofollow author" target="_blank" href="http://t.qq.com/MINJIE1" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=7097016&#39;;" title="MINJIE1"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/50(3)" alt="MINJIE1"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://t.qq.com/MINJIE1" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=7097016&#39;;" rel="nofollow" target="_blank" data-user-id="7097016">MINJIE1</a></div><p><a class="ds-comment-context" data-post-id="6327431875723789058" data-parent-id="6327020907751539458">回复 周亮: </a>一起学习</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-07T11:47:16+08:00" title="2016年9月7日 上午11:47:16">2016年9月7日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6327431897127322370"><div class="ds-post-self" data-post-id="6327431897127322370" data-thread-id="6325977738318447362" data-root-id="6327431338559275777" data-source="duoshuo"><div class="ds-avatar" data-user-id="7097016"><a rel="nofollow author" target="_blank" href="http://t.qq.com/MINJIE1" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=7097016&#39;;" title="MINJIE1"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/50(3)" alt="MINJIE1"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://t.qq.com/MINJIE1" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=7097016&#39;;" rel="nofollow" target="_blank" data-user-id="7097016">MINJIE1</a></div><p><a class="ds-comment-context" data-post-id="6327431897127322370" data-parent-id="6327431338559275777">回复 龚海兵: </a>一起学习</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-07T11:47:21+08:00" title="2016年9月7日 上午11:47:21">2016年9月7日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6328222621427041025"><div class="ds-post-self" data-post-id="6328222621427041025" data-thread-id="6325977738318447362" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6273341874660967170"><a rel="nofollow author" target="_blank" href="javascript:void(0)" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6273341874660967170&#39;;" title="蓝色山竹"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/0" alt="蓝色山竹"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="javascript:void(0)" onclick="this.href=&#39;http://MINJIE1.duoshuo.com/user-url/?user_id=6273341874660967170&#39;;" rel="nofollow" target="_blank" data-user-id="6273341874660967170">蓝色山竹</a></div><p>好！看了楼主的文章一语理清了我的思路！赞</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-09-09T14:55:46+08:00" title="2016年9月9日 下午2:55:46">2016年9月9日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶(2)</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li></ul><div class="ds-paginator" style="display: none;"><div class="ds-border"></div><a data-page="1" href="javascript:void(0);" class="ds-current">1</a></div><a name="respond"></a><div class="ds-login-buttons"><p>社交帐号登录:</p><div class="ds-social-links"><ul class="ds-service-list"><li><a href="http://minjie1.duoshuo.com/login/weixin/" rel="nofollow" class="ds-service-link ds-weixin">微信</a></li><li><a href="http://minjie1.duoshuo.com/login/weibo/" rel="nofollow" class="ds-service-link ds-weibo">微博</a></li><li><a href="http://minjie1.duoshuo.com/login/qq/" rel="nofollow" class="ds-service-link ds-qq">QQ</a></li><li><a href="http://minjie1.duoshuo.com/login/renren/" rel="nofollow" class="ds-service-link ds-renren">人人</a></li><li><a class="ds-more-services" href="javascript:void(0)">更多»</a></li></ul><ul class="ds-service-list ds-additional-services"><li><a href="http://minjie1.duoshuo.com/login/douban/" rel="nofollow" class="ds-service-link ds-douban">豆瓣</a></li><li><a href="http://minjie1.duoshuo.com/login/kaixin/" rel="nofollow" class="ds-service-link ds-kaixin">开心</a></li><li><a href="http://minjie1.duoshuo.com/login/baidu/" rel="nofollow" class="ds-service-link ds-baidu">百度</a></li><li><a href="http://minjie1.duoshuo.com/login/google/" rel="nofollow" class="ds-service-link ds-google">谷歌</a></li></ul></div></div><div class="ds-replybox"><a class="ds-avatar" href="javascript:void(0);" onclick="return false"><img src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/noavatar_default.png" alt=""></a><form method="post"><input type="hidden" name="thread_id" value="6325977738318447362">
+<input type="hidden" name="parent_id" value="">
+<input type="hidden" name="nonce" value="5871cc741998c"><div class="ds-textarea-wrapper ds-rounded-top"><textarea name="message" title="Ctrl+Enter快捷提交" placeholder="说点什么吧…"></textarea><pre class="ds-hidden-text"></pre></div><div class="ds-post-toolbar"><div class="ds-post-options ds-gradient-bg"><span class="ds-sync"></span></div><button class="ds-post-button" type="submit">发布</button><div class="ds-toolbar-buttons"><a class="ds-toolbar-button ds-add-emote" title="插入表情"></a></div></div></form></div><p class="ds-powered-by"><a href="http://duoshuo.com/" target="_blank" rel="nofollow">mike‘s blog正在使用多说</a></p></div></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first" style="top: 5px; transform: rotateZ(-45deg); width: 100%;"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle" style="opacity: 0;"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last" style="top: -5px; transform: rotateZ(45deg); width: 100%;"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar sidebar-active" style="display: block; width: 320px;">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element" style="opacity: 1; display: block; transform: translateX(0px);">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person" style="opacity: 1; display: block; transform: translateX(0px);">
+          <img class="site-author-image" itemprop="image" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/default_avatar.jpg" alt="mike">
+          <p class="site-author-name" itemprop="name">mike</p>
+          <p class="site-description motion-element" itemprop="description" style="opacity: 1; display: block; transform: translateX(0px);">android , java</p>
+        </div>
+        <nav class="site-state motion-element" style="opacity: 1; display: block; transform: translateX(0px);">
+          <div class="site-state-item site-state-posts">
+            <a href="http://minjie.tech/archives">
+              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element" style="opacity: 1; display: block; transform: translateX(0px);">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active" style="opacity: 1; display: block; transform: translateX(0px);">
+          <div class="post-toc" style="max-height: 475px; width: calc(100% + 17px);">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="http://minjie.tech/2016/09/03/%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81%E6%9D%A5%E4%BA%86%E8%A7%A3Android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/#ViewGroup的事件分发机制"><span class="nav-number">1.</span> <span class="nav-text">ViewGroup的事件分发机制</span></a></li><li class="nav-item nav-level-2 active active-current"><a class="nav-link" href="http://minjie.tech/2016/09/03/%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81%E6%9D%A5%E4%BA%86%E8%A7%A3Android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/#View的事件分发机制"><span class="nav-number">2.</span> <span class="nav-text">View的事件分发机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="http://minjie.tech/2016/09/03/%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81%E6%9D%A5%E4%BA%86%E8%A7%A3Android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/#问题解答"><span class="nav-number">3.</span> <span class="nav-text">问题解答</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="http://minjie.tech/2016/09/03/%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81%E6%9D%A5%E4%BA%86%E8%A7%A3Android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/#同时为View注册了OnTouchListener，OnLongClickListener，OnClickListener这三个事件监听器，这三个监听器被触发执行的先后顺序"><span class="nav-number">3.1.</span> <span class="nav-text">同时为View注册了OnTouchListener，OnLongClickListener，OnClickListener这三个事件监听器，这三个监听器被触发执行的先后顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="http://minjie.tech/2016/09/03/%E5%9F%BA%E4%BA%8E%E6%BA%90%E7%A0%81%E6%9D%A5%E4%BA%86%E8%A7%A3Android%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/#父容器和子控件都注册了OnTouchListener事件监听器的问题"><span class="nav-number">3.2.</span> <span class="nav-text">父容器和子控件都注册了OnTouchListener事件监听器的问题</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  © 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mike</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io/">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top back-to-top-on">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/index.js"></script>
+
+  
+  <script type="text/javascript" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/jquery.lazyload.js"></script>
+
+  
+  <script type="text/javascript" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/utils.js"></script>
+
+  <script type="text/javascript" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/motion.js"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/scrollspy.js"></script>
+<script type="text/javascript" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/post-details.js"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="./基于源码来了解Android的事件分发机制 _ mike's 学习点滴_files/bootstrap.js"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"MINJIE1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+
+
+</body></html>

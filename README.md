@@ -7,7 +7,8 @@
   2.最后的child是viewGroup，这时会调到viewGroup的dispatchTouchEvent，然后child为null，
   接着dispatchTransformedTouchEvent，然后调用viewGroup父类view的dispatchTouchEvent，接着
   调用viewGroup的onTouchEvent方法（多态）(tips2) 
-  * 总结：事件从顶层view的的dispatchTouchEvent一层一层传到触摸到的最底层的view(view或者viewGroup)的dispatchTouchEvent，如果是view会传到onTouchEvent,如果是viewgroup,首先会传到viewgroup的dispatchTouchEvent，在通过viewgroup的dispatchTransformedTouchEvent调用super.dispatchTouchEvent,从而传到viewgroup的onTouchEvent(前提是没有重写dispatchTouchEvent方法)
+  * 总结：事件从顶层view的的dispatchTouchEvent一层一层传到触摸到的最底层的view(view或者viewGroup)的dispatchTouchEvent，
+    如果是view会传到onTouchEvent,如果是viewgroup,首先会传到viewgroup的dispatchTouchEvent，在通过viewgroup的dispatchTransformedTouchEvent调用super.dispatchTouchEvent,从而传到viewgroup的onTouchEvent(前提是没有重写dispatchTouchEvent方法)
   ```java
   private boolean dispatchTransformedTouchEvent(MotionEvent event, boolean cancel,
             View child, int desiredPointerIdBits) {
@@ -26,7 +27,9 @@
             // 如果child不为null，则会调用该child的dispatchTouchEvent，一直递归下去 
             //如果这时走到最后一层了
             //tips1:child为view，会调到view的dispatchTouchEvent，然后是onTouchEvent方法
-            //tips2：child为viewGroup，然后走到viewGroup的dispatchTouchEvent,继而走到viewgroup的dispatchTransformedTouchEvent（该方法，此时child为空），走到tips3，最后走到该child（实际为viewGroup）的onTouchEvent
+            //tips2：child为viewGroup，然后走到viewGroup的dispatchTouchEvent,
+            //继而走到viewgroup的dispatchTransformedTouchEvent（该方法，此时child为空），
+            // 走到tips3，最后走到该child（实际为viewGroup）的onTouchEvent
             handled = child.dispatchTouchEvent(transformedEvent);
         }
         // Done.
@@ -35,10 +38,12 @@
     }`
   ```     
 * 2.加入的最后的child的dispatchTouchEvent返回false（直接调super一样(一般的view，继承自view，没有设置监听listener，
-  并且也不是CLICKABLE，dispatchTouchEvent调用的onTouchEvent返回false，从而dispatchTouchEvent返回false)），这时倒数第二层的ViewGroup的
+  并且也不是CLICKABLE，dispatchTouchEvent调用的onTouchEvent返回false，从而dispatchTouchEvent返回false)），
+  这时倒数第二层的ViewGroup的
   dispatchTransformedTouchEvent会返回false，if里面的代码不会走，mFirstTouchTarget会等于null，这时代码走下去会继续调用
   dispatchTransformedTouchEvent,此时传入的child是null,所以这时会调用viewGroup父类view的dispatchTouchEvent，接着
-  调用viewGroup的onTouchEvent方法（多态）（接着会回溯上去，如果都是调super实现的话，最终会到顶层viewDevorView的onTouchEvent方法，再到Activity的onTouchEvent方法。（此时down事件走完）
+  调用viewGroup的onTouchEvent方法（多态）（接着会回溯上去，如果都是调super实现的话，
+  最终会到顶层viewDevorView的onTouchEvent方法，再到Activity的onTouchEvent方法。（此时down事件走完）
   * 结论1：dispatchTouchEvent 和 onTouchEvent return false的时候事件都回传给父控件的onTouchEvent处理。
      ```java
           public boolean dispatchTouchEvent(MotionEvent ev) {

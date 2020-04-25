@@ -11,7 +11,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+// http://minjie.tech/2016/04/26/Binder%E7%9A%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9/
+// https://www.jianshu.com/p/e99b5e8bd67b
 
+//https://blog.csdn.net/guolin_blog/article/details/9097463
+//https://blog.csdn.net/guolin_blog/article/details/9153747
 public class ListenerActivity extends Activity implements View.OnTouchListener, View.OnClickListener {
     //修改
     private LinearLayout mLayout;

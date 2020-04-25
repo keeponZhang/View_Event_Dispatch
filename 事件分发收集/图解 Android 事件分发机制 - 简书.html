@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://www.jianshu.com/p/e99b5e8bd67b -->
+<html><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<script type="text/javascript" src="./图解 Android 事件分发机制 - 简书_files/1255494d3a"></script><script src="./图解 Android 事件分发机制 - 简书_files/nr-1016.min.js"></script><script src="./图解 Android 事件分发机制 - 简书_files/push.js"></script><script async="" src="./图解 Android 事件分发机制 - 简书_files/analytics.js"></script><script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","errorBeacon":"bam.nr-data.net","licenseKey":"1255494d3a","applicationID":"15702971","transactionName":"e1daR0JWVV9RER9ZWkxdRxxDUVZE","queueTime":14,"applicationTime":58,"agent":""}</script>
+<script type="text/javascript">window.NREUM||(NREUM={}),__nr_require=function(e,t,n){function r(n){if(!t[n]){var o=t[n]={exports:{}};e[n][0].call(o.exports,function(t){var o=e[n][1][t];return r(o||t)},o,o.exports)}return t[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<n.length;o++)r(n[o]);return r}({1:[function(e,t,n){function r(){}function o(e,t,n){return function(){return i(e,[(new Date).getTime()].concat(u(arguments)),t?null:this,n),t?void 0:this}}var i=e("handle"),a=e(2),u=e(3),c=e("ee").get("tracer"),f=NREUM;"undefined"==typeof window.newrelic&&(newrelic=f);var s=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],l="api-",p=l+"ixn-";a(s,function(e,t){f[t]=o(l+t,!0,"api")}),f.addPageAction=o(l+"addPageAction",!0),f.setCurrentRouteName=o(l+"routeName",!0),t.exports=newrelic,f.interaction=function(){return(new r).get()};var d=r.prototype={createTracer:function(e,t){var n={},r=this,o="function"==typeof t;return i(p+"tracer",[Date.now(),e,n],r),function(){if(c.emit((o?"":"no-")+"fn-start",[Date.now(),r,o],n),o)try{return t.apply(this,arguments)}finally{c.emit("fn-end",[Date.now()],n)}}}};a("setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(e,t){d[t]=o(p+t)}),newrelic.noticeError=function(e){"string"==typeof e&&(e=new Error(e)),i("err",[e,(new Date).getTime()])}},{}],2:[function(e,t,n){function r(e,t){var n=[],r="",i=0;for(r in e)o.call(e,r)&&(n[i]=t(r,e[r]),i+=1);return n}var o=Object.prototype.hasOwnProperty;t.exports=r},{}],3:[function(e,t,n){function r(e,t,n){t||(t=0),"undefined"==typeof n&&(n=e?e.length:0);for(var r=-1,o=n-t||0,i=Array(o<0?0:o);++r<o;)i[r]=e[t+r];return i}t.exports=r},{}],ee:[function(e,t,n){function r(){}function o(e){function t(e){return e&&e instanceof r?e:e?c(e,u,i):i()}function n(n,r,o){if(!p.aborted){e&&e(n,r,o);for(var i=t(o),a=v(n),u=a.length,c=0;c<u;c++)a[c].apply(i,r);var f=s[w[n]];return f&&f.push([y,n,r,i]),i}}function d(e,t){b[e]=v(e).concat(t)}function v(e){return b[e]||[]}function g(e){return l[e]=l[e]||o(n)}function m(e,t){f(e,function(e,n){t=t||"feature",w[n]=t,t in s||(s[t]=[])})}var b={},w={},y={on:d,emit:n,get:g,listeners:v,context:t,buffer:m,abort:a,aborted:!1};return y}function i(){return new r}function a(){(s.api||s.feature)&&(p.aborted=!0,s=p.backlog={})}var u="nr@context",c=e("gos"),f=e(2),s={},l={},p=t.exports=o();p.backlog=s},{}],gos:[function(e,t,n){function r(e,t,n){if(o.call(e,t))return e[t];var r=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,t,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return e[t]=r,r}var o=Object.prototype.hasOwnProperty;t.exports=r},{}],handle:[function(e,t,n){function r(e,t,n,r){o.buffer([e],r),o.emit(e,t,n)}var o=e("ee").get("handle");t.exports=r,r.ee=o},{}],id:[function(e,t,n){function r(e){var t=typeof e;return!e||"object"!==t&&"function"!==t?-1:e===window?0:a(e,i,function(){return o++})}var o=1,i="nr@id",a=e("gos");t.exports=r},{}],loader:[function(e,t,n){function r(){if(!h++){var e=y.info=NREUM.info,t=l.getElementsByTagName("script")[0];if(setTimeout(f.abort,3e4),!(e&&e.licenseKey&&e.applicationID&&t))return f.abort();c(b,function(t,n){e[t]||(e[t]=n)}),u("mark",["onload",a()],null,"api");var n=l.createElement("script");n.src="https://"+e.agent,t.parentNode.insertBefore(n,t)}}function o(){"complete"===l.readyState&&i()}function i(){u("mark",["domContent",a()],null,"api")}function a(){return(new Date).getTime()}var u=e("handle"),c=e(2),f=e("ee"),s=window,l=s.document,p="addEventListener",d="attachEvent",v=s.XMLHttpRequest,g=v&&v.prototype;NREUM.o={ST:setTimeout,CT:clearTimeout,XHR:v,REQ:s.Request,EV:s.Event,PR:s.Promise,MO:s.MutationObserver},e(1);var m=""+location,b={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1016.min.js"},w=v&&g&&g[p]&&!/CriOS/.test(navigator.userAgent),y=t.exports={offset:a(),origin:m,features:{},xhrWrappable:w};l[p]?(l[p]("DOMContentLoaded",i,!1),s[p]("load",r,!1)):(l[d]("onreadystatechange",o),s[d]("onload",r)),u("mark",["firstbyte",a()],null,"api");var h=0},{}]},{},["loader"]);</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="description" content="在Android开发中，事件分发机制是一块Android比较重要的知识体系，了解并熟悉整套的分发机制有助于更好的分析各种点击滑动失效问题，更好去扩展控件的事件功能和开发自定义控件，同时事件分发机制也是Android面试必问考点之一，如果你能把下面的一些事件分发图当场画出来肯定加分不少。废话不多说，总结一句:事件分发机制很重要。 Android 事件分发流 关于Android 事件分发机制网上...">
+  <meta property="wb:webmaster" content="294ec9de89e7fadb">
+  <meta property="qc:admins" content="104102651453316562112116375">
+  <meta property="qc:admins" content="11635613706305617">
+  <meta property="qc:admins" content="1163561616621163056375">
+  <meta name="google-site-verification" content="cV4-qkUJZR6gmFeajx_UyPe47GW9vY6cnCrYtCHYNh4">
+  <meta name="google-site-verification" content="HF7lfF8YEGs1qtCE-kPml8Z469e2RHhGajy6JPVy5XI">
+  <meta http-equiv="mobile-agent" content="format=html5; url=http://www.jianshu.com/p/e99b5e8bd67b">
+    <!--  Meta for Smart App Banner -->
+  <meta name="apple-itunes-app" content="app-id=888237539, app-argument=jianshu://notes/4416578">
+  <!-- End -->
+
+  <!--  Meta for Twitter Card -->
+  <meta content="summary" property="twitter:card">
+  <meta content="@jianshucom" property="twitter:site">
+  <meta content="图解 Android 事件分发机制" property="twitter:title">
+  <meta content="在Android开发中，事件分发机制是一块Android比较重要的知识体系，了解并熟悉整套的分发机制有助于更好的分析各种点击滑动失效问题，更好去扩展控件的事件功能和开发自定义控件，同时事件分发机制也是Android面试必问考点之一，如果你能把下面的一些事件分发图当场画出来肯定加分不少。废话不多说，总结一句:事件分发机制很重要。 Android 事件分发流 关于Android 事件分发机制网上的博文很多，但是很多都是写个Demo然后贴一下输出的Log或者拿源码分析，然后一堆的注释和说明，如果用心的去看肯定是收获不少但是确实很难把整个流程说清和记住。曾经也是拼命想记住整个流程，但是一段时间又..." property="twitter:description">
+  <meta content="http://www.jianshu.com/p/e99b5e8bd67b" property="twitter:url">
+  <!-- End -->
+
+  <!--  Meta for OpenGraph -->
+  <meta property="fb:app_id" content="865829053512461">
+  <meta property="og:site_name" content="简书">
+  <meta property="og:title" content="图解 Android 事件分发机制">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="http://www.jianshu.com/p/e99b5e8bd67b">
+  <meta property="og:description" content="在Android开发中，事件分发机制是一块Android比较重要的知识体系，了解并熟悉整套的分发机制有助于更好的分析各种点击滑动失效问题，更好去扩展控件的事件功能和开发自定义控件，同时事件分发机...">
+  <!-- End -->
+
+  <!--  Meta for Facebook Applinks -->
+  <meta property="al:ios:url" content="jianshu://notes/4416578">
+  <meta property="al:ios:app_store_id" content="888237539">
+  <meta property="al:ios:app_name" content="简书">
+
+  <meta property="al:android:url" content="jianshu://notes/4416578">
+  <meta property="al:android:package" content="com.jianshu.haruki">
+  <meta property="al:android:app_name" content="简书">
+  <!-- End -->
+
+  <title>图解 Android 事件分发机制 - 简书</title>
+  <meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="/3U0yAHHikZOu2oTEggbGRzAZwu8ypVdaP+HnKXCeb+ARsgBwge5rVW6isEVLCcDf6qGBjR4Dv0ULOIP9tnTJQ==">
+  <!--[if lte IE 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="stylesheet" media="all" href="./图解 Android 事件分发机制 - 简书_files/web-c93680721255cdea8c6c.css">
+  
+  <link rel="stylesheet" media="all" href="./图解 Android 事件分发机制 - 简书_files/entry-c93680721255cdea8c6c.css">
+  <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+  <!--[if IE 8]><link rel="stylesheet" media="all" href="http://cdn-qn0.jianshu.io/assets/scaffolding/for_ie-7f1c477ffedc13c11315103e8787dc6c.css" /><![endif]-->
+  <!--[if lt IE 9]><link rel="stylesheet" media="all" href="http://cdn-qn0.jianshu.io/assets/scaffolding/for_ie-7f1c477ffedc13c11315103e8787dc6c.css" /><![endif]-->
+  <link href="http://baijii-common.b0.upaiyun.com/icons/favicon.ico" rel="icon">
+      <link rel="apple-touch-icon-precomposed" href="http://cdn-qn0.jianshu.io/apple-touch-icons/57.png" sizes="57x57">
+      <link rel="apple-touch-icon-precomposed" href="http://cdn-qn0.jianshu.io/apple-touch-icons/72.png" sizes="72x72">
+      <link rel="apple-touch-icon-precomposed" href="http://cdn-qn0.jianshu.io/apple-touch-icons/76.png" sizes="76x76">
+      <link rel="apple-touch-icon-precomposed" href="http://cdn-qn0.jianshu.io/apple-touch-icons/114.png" sizes="114x114">
+      <link rel="apple-touch-icon-precomposed" href="http://cdn-qn0.jianshu.io/apple-touch-icons/120.png" sizes="120x120">
+      <link rel="apple-touch-icon-precomposed" href="http://cdn-qn0.jianshu.io/apple-touch-icons/152.png" sizes="152x152">
+</head>
+
+  <body lang="zh-CN" class="reader-black-font">
+    <!-- 全局顶部导航栏 -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="width-limit">
+    <!-- 左上方 Logo -->
+    <a class="logo" href="http://www.jianshu.com/"><img src="./图解 Android 事件分发机制 - 简书_files/logo-58fd04f6f0de908401aa561cda6a0688.png" alt="Logo"></a>
+
+    <!-- 右上角 -->
+      <!-- 登录显示写文章 -->
+      <a class="btn write-btn" target="_blank" href="http://www.jianshu.com/writer#/">
+        <i class="iconfont ic-write"></i>写文章
+</a>
+    <!-- 如果用户登录，显示下拉菜单 -->
+      <div class="user">
+        <div data-hover="dropdown">
+          <a class="avatar" href="http://www.jianshu.com/u/0ad911efecfc"><img src="./图解 Android 事件分发机制 - 简书_files/14-0651acff782e7a18653d7530d6b27661.jpg" alt="14"></a>
+        </div>
+        <ul class="dropdown-menu">
+          <li>
+            <a href="http://www.jianshu.com/u/0ad911efecfc">
+              <i class="iconfont ic-navigation-profile"></i><span>我的主页</span>
+</a>          </li>
+          <li>
+            <!-- TODO bookmarks_path -->
+            <a href="http://www.jianshu.com/bookmarks">
+              <i class="iconfont ic-navigation-mark"></i><span>收藏的文章</span>
+</a>          </li>
+          <li>
+            <a href="http://www.jianshu.com/users/0ad911efecfc/liked_notes">
+              <i class="iconfont ic-navigation-like"></i><span>喜欢的文章</span>
+</a>          </li>
+          <li>
+            <a href="http://www.jianshu.com/wallet">
+              <i class="iconfont ic-navigation-wallet"></i><span>我的钱包</span>
+</a>          </li>
+          <li>
+            <a href="http://www.jianshu.com/settings">
+              <i class="iconfont ic-navigation-settings"></i><span>设置</span>
+</a>          </li>
+          <li>
+            <a href="http://www.jianshu.com/contact">
+              <i class="iconfont ic-navigation-feedback"></i><span>帮助与反馈</span>
+</a>          </li>
+          <li>
+            <a rel="nofollow" data-method="delete" href="http://www.jianshu.com/sign_out">
+              <i class="iconfont ic-navigation-signout"></i><span>退出</span>
+</a>          </li>
+        </ul>
+      </div>
+
+    <div class="style-mode" id="view-mode-ctrl"> <a class="style-mode-btn"><i class="iconfont ic-navigation-mode"></i></a> <div class="popover-modal" style="left: 0px; display: none;"> <div class="meta"> <i class="iconfont ic-navigation-night"></i><span>夜间模式</span> </div> <div class="switch day-night-group"> <a class="switch-btn">开</a> <a class="switch-btn active">关</a> </div> <hr> <div class="switch font-family-group"> <a class="switch-btn font-song">宋体</a> <a class="switch-btn font-hei active">黑体</a> </div> <div class="switch"> <a class="switch-btn active">简</a> <a class="switch-btn">繁</a> </div> </div> </div>
+    <div class="container">
+      <div class="row">
+        <ul class="nav navbar-nav">
+            <li class="">
+              <a href="http://www.jianshu.com/">
+                <span class="menu-text">发现</span><i class="iconfont ic-navigation-discover menu-icon"></i>
+</a>            </li>
+            <li class="">
+              <a href="http://www.jianshu.com/subscriptions">
+                <span class="menu-text">关注</span><i class="iconfont ic-navigation-follow menu-icon"></i>
+</a>            </li>
+            <li class="notification" data-n-cat="total">
+              <a class="notification-btn" data-hover="dropdown" href="http://www.jianshu.com/notifications"> <span class="menu-text">消息</span> <i class="iconfont ic-navigation-notification menu-icon"></i>   </a> <ul class="dropdown-menu"> <li> <a href="http://www.jianshu.com/notifications#!/comments"> <i class="iconfont ic-comments"></i> <span>评论</span>  </a> </li><li> <a href="http://www.jianshu.com/notifications#!/chats"> <i class="iconfont ic-chats"></i> <span>简信</span>  </a> </li><li> <a href="http://www.jianshu.com/notifications#!/requests"> <i class="iconfont ic-requests"></i> <span>投稿请求</span>  </a> </li><li> <a href="http://www.jianshu.com/notifications#!/likes"> <i class="iconfont ic-likes"></i> <span>喜欢和赞</span>  </a> </li><li> <a href="http://www.jianshu.com/notifications#!/follows"> <i class="iconfont ic-follows"></i> <span>关注</span>  </a> </li><li> <a href="http://www.jianshu.com/notifications#!/money"> <i class="iconfont ic-money"></i> <span>打赏</span>  </a> </li><li> <a href="http://www.jianshu.com/notifications#!/others"> <i class="iconfont ic-others"></i> <span>其他消息</span>  </a> </li> </ul>
+            </li>
+          <li class="">
+            <a class="app-download-btn" href="http://www.jianshu.com/apps"><span class="menu-text">下载App</span><i class="iconfont ic-navigation-download menu-icon"></i></a>
+          </li>
+          <li class="search">
+            <form target="_blank" action="http://www.jianshu.com/search" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="✓">
+              <input type="text" name="q" id="q" value="" placeholder="搜索" class="search-input">
+              <a class="search-btn" href="javascript:void(null)"><i class="iconfont ic-search"></i></a>
+              <!-- <div id="navbar-trending-search"></div> -->
+</form>          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+    
+<div class="note">
+  <div class="post">
+    <div class="article">
+        <h1 class="title">图解 Android 事件分发机制</h1>
+
+        <!-- 作者区域 -->
+        <div class="author">
+          <a class="avatar" href="http://www.jianshu.com/u/942d45d61f59">
+            <img src="./图解 Android 事件分发机制 - 简书_files/c35cf84af036.JPG" alt="144">
+</a>          <div class="info">
+            <span class="tag">作者</span>
+            <span class="name"><a href="http://www.jianshu.com/u/942d45d61f59">Kelin</a></span>
+            <!-- 关注用户按钮 -->
+            <a class="btn btn-default following"> <i class="iconfont ic-followed"></i><span>已关注</span>  </a>  
+            <!-- 文章数据信息 -->
+            <div class="meta">
+              <span class="publish-time">2016.06.20 18:07</span>
+              <span class="wordage">字数 3882 </span>
+            <span class="views-count">阅读 27955</span><span class="comments-count">评论 123</span><span class="likes-count">喜欢 350</span></div>
+          </div>
+          <!-- 如果是当前作者，加入编辑按钮 -->
+        </div>
+        <!-- -->
+
+        <!-- 文章内容 -->
+        <div class="show-content">
+          <p>在Android开发中，事件分发机制是一块Android比较重要的知识体系，了解并熟悉整套的分发机制有助于更好的分析各种点击滑动失效问题，更好去扩展控件的事件功能和开发自定义控件，同时事件分发机制也是Android面试必问考点之一，如果你能把下面的一些事件分发图当场画出来肯定加分不少。废话不多说，总结一句:<strong>事件分发机制很重要</strong>。</p>
+<h3>Android 事件分发流</h3>
+<p>关于Android 事件分发机制网上的博文很多，但是很多都是写个Demo然后贴一下输出的Log或者拿源码分析，然后一堆的注释和说明，如果用心的去看肯定是收获不少但是确实很难把整个流程说清和记住。曾经也是拼命想记住整个流程，但是一段时间又忘了，最后觉得分析这种问题和事件流的走向，一张图来解释和说明会清晰很多，下面我根据画的一张事件分发流程图,说明的事件从用户点击之后，在不同函数不同返回值的情况的最终走向。</p>
+<div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-b9cb65aceea9219b.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-b9cb65aceea9219b.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption">图 1.</div>
+</div>
+<p><strong>注：</strong></p>
+<blockquote><ul>
+<li>仔细看的话，图分为3层，从上往下依次是Activity、ViewGroup、View</li>
+<li>事件从左上角那个白色箭头开始，由Activity的dispatchTouchEvent做分发</li>
+<li>箭头的上面字代表方法返回值，（return true、return false、return super.xxxxx(),super 的意思是调用父类实现。</li>
+<li>dispatchTouchEvent和 onTouchEvent的框里有个【<strong>true----&gt;消费</strong>】的字，表示的意思是如果方法返回true，那么代表事件就此消费，不会继续往别的地方传了，事件终止。</li>
+<li>目前所有的图的事件是针对ACTION_DOWN的，对于ACTION_MOVE和ACTION_UP我们最后做分析。</li>
+<li>之前图中的Activity 的dispatchTouchEvent 有误（图已修复），只有return  super.dispatchTouchEvent(ev) 才是往下走，返回true 或者 false 事件就被消费了（终止传递）。</li>
+</ul></blockquote>
+<p>仔细看整个图，我们得出事件流 走向的几个结论（希望读者专心的看下图 1，多看几遍，脑子有比较清晰的概念。）<br>1、<strong>如果事件不被中断，整个事件流向是一个类U型图</strong>，我们来看下这张图，可能更能理解U型图的意思。</p>
+<div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-d01a5845f7426097.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-d01a5845f7426097.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption">图 2.</div>
+</div>
+<p>所以如果我们没有对控件里面的方法进行重写或更改返回值，而直接用super调用父类的默认实现，那么整个事件流向应该是从Activity----&gt;ViewGroup---&gt;View 从上往下调用dispatchTouchEvent方法，一直到叶子节点（View）的时候，再由View---&gt;ViewGroup---&gt;Activity从下往上调用onTouchEvent方法。</p>
+<p><strong>2、dispatchTouchEvent 和 onTouchEvent 一旦return true,事件就停止传递了（到达终点）（没有谁能再收到这个事件）</strong>。看下图中只要return true事件就没再继续传下去了，<strong>对于return true我们经常说事件被消费了，消费了的意思就是事件走到这里就是终点，不会往下传，没有谁能再收到这个事件了</strong>。</p>
+<div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-84c37551ad520641.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-84c37551ad520641.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption">图 3.</div>
+</div><p><br><strong>3、dispatchTouchEvent 和 onTouchEvent return false的时候事件都回传给父控件的onTouchEvent处理。</strong></p>
+<div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-6bc8e2795a30f98f.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-6bc8e2795a30f98f.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption">图 4.</div>
+</div><p><br>看上图深蓝色的线，对于返回false的情况，事件都是传给父控件onTouchEvent处理。</p>
+<blockquote><ul>
+<li><strong>对于dispatchTouchEvent 返回 false 的含义应该是：事件停止往子View传递和分发同时开始往父控件回溯（父控件的onTouchEvent开始从下往上回传直到某个onTouchEvent return true），事件分发机制就像递归，return false 的意义就是递归停止然后开始回溯。</strong></li>
+<li><strong>对于onTouchEvent return false 就比较简单了，它就是不消费事件，并让事件继续往父控件的方向从下往上流动。</strong></li>
+</ul></blockquote>
+<p><strong>4、dispatchTouchEvent、onTouchEvent、onInterceptTouchEvent<br>ViewGroup 和View的这些方法的默认实现就是会让整个事件安装U型完整走完，所以 return super.xxxxxx() 就会让事件依照U型的方向的完整走完整个事件流动路径），中间不做任何改动，不回溯、不终止，每个环节都走到。</strong></p>
+<div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-7f3ab9e7e7a1f0a2.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-7f3ab9e7e7a1f0a2.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption">Paste_Image.png</div>
+</div><p><br>所以如果看到方法return super.xxxxx() 那么事件的下一个流向就是走U型下一个目标，稍微记住上面这张图，你就能很快判断出下一个走向是哪个控件的哪个函数。<br>5、onInterceptTouchEvent 的作用<br></p><div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-403f6e8b820f71f1.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-403f6e8b820f71f1.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption">图 5.</div>
+</div>
+<p>Intercept 的意思就拦截，每个ViewGroup每次在做分发的时候，问一问拦截器要不要拦截（也就是问问自己这个事件要不要自己来处理）如果要自己处理那就在onInterceptTouchEvent方法中 return true就会交给自己的onTouchEvent的处理，如果不拦截就是继续往子控件往下传。<strong>默认是不会去拦截的，因为子View也需要这个事件，所以onInterceptTouchEvent拦截器return super.onInterceptTouchEvent()和return false是一样的，是不会拦截的，事件会继续往子View的dispatchTouchEvent传递</strong>。</p>
+<p>6、ViewGroup 和View 的dispatchTouchEvent方法返回super.dispatchTouchEvent()的时候事件流走向。<br></p><div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-4edf17b789cd047f.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-4edf17b789cd047f.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption">图 6</div>
+</div>
+<p>首先看下ViewGroup 的dispatchTouchEvent，之前说的return true是终结传递。return false 是回溯到父View的onTouchEvent，<strong>然后ViewGroup怎样通过dispatchTouchEvent方法能把事件分发到自己的onTouchEvent处理呢，return true和false 都不行，那么只能通过Interceptor把事件拦截下来给自己的onTouchEvent，所以ViewGroup dispatchTouchEvent方法的super默认实现就是去调用onInterceptTouchEvent，记住这一点</strong>。<br>那么对于<strong>View</strong>的dispatchTouchEvent return super.dispatchTouchEvent()的时候呢事件会传到哪里呢，很遗憾View没有拦截器。<strong>但是同样的道理return true是终结。return false 是回溯会父类的onTouchEvent，怎样把事件分发给自己的onTouchEvent 处理呢，那只能return super.dispatchTouchEvent,View类的dispatchTouchEvent（）方法默认实现就是能帮你调用View自己的onTouchEvent方法的。</strong></p>
+<p>说了这么多，不知道有说清楚没有，我这边最后总结一下：</p>
+<ul>
+<li>对于 dispatchTouchEvent，onTouchEvent，return true是终结事件传递。return false 是回溯到父View的onTouchEvent方法。</li>
+<li>ViewGroup 想把自己分发给自己的onTouchEvent，需要拦截器onInterceptTouchEvent方法return true 把事件拦截下来。</li>
+<li>ViewGroup 的拦截器onInterceptTouchEvent 默认是不拦截的，所以return super.onInterceptTouchEvent()=return false；</li>
+<li>View 没有拦截器，为了让View可以把事件分发给自己的onTouchEvent，View的dispatchTouchEvent默认实现（super）就是把事件分发给自己的onTouchEvent。</li>
+</ul>
+<p>ViewGroup和View 的dispatchTouchEvent 是做事件分发，那么这个事件可能分发出去的四个目标</p>
+<blockquote><p>注：------&gt; 后面代表事件目标需要怎么做。<br>1、 自己消费，终结传递。-------&gt;return true ；<br>   2、 给自己的onTouchEvent处理-------&gt; 调用super.dispatchTouchEvent()系统默认会去调用 onInterceptTouchEvent，在onInterceptTouchEvent return true就会去把事件分给自己的onTouchEvent处理。<br>   3、 传给子View------&gt;调用super.dispatchTouchEvent()默认实现会去调用 onInterceptTouchEvent 在onInterceptTouchEvent return false，就会把事件传给子类。<br>   4、 不传给子View，事件终止往下传递，事件开始回溯，从父View的onTouchEvent开始事件从下到上回归执行每个控件的onTouchEvent-------&gt;return false；<br><strong>注：</strong> 由于View没有子View所以不需要onInterceptTouchEvent 来控件是否把事件传递给子View还是拦截，所以View的事件分发调用super.dispatchTouchEvent()的时候默认把事件传给自己的onTouchEvent处理（相当于拦截），对比ViewGroup的dispatchTouchEvent 事件分发，View的事件分发没有上面提到的4个目标的第3点。</p></blockquote>
+<p>ViewGroup和View的onTouchEvent方法是做事件处理的，那么这个事件只能有两个处理方式：</p>
+<blockquote><p>1、自己消费掉，事件终结，不再传给谁-----&gt;return true;<br>   2、继续从下往上传，不消费事件，让父View也能收到到这个事件-----&gt;return false;View的默认实现是不消费的。所以super==false。</p></blockquote>
+<p>ViewGroup的onInterceptTouchEvent方法对于事件有两种情况：</p>
+<blockquote><p>1、拦截下来，给自己的onTouchEvent处理---&gt;return true;<br>    2、不拦截，把事件往下传给子View----&gt;return false,ViewGroup默认是不拦截的，所以super==false；</p></blockquote>
+<h4>关于ACTION_MOVE 和 ACTION_UP</h4>
+<p>上面讲解的都是针对ACTION_DOWN的事件传递，ACTION_MOVE和ACTION_UP在传递的过程中并不是和ACTION_DOWN 一样，你在执行ACTION_DOWN的时候返回了false，后面一系列其它的action就不会再得到执行了。简单的说，就是当dispatchTouchEvent在进行事件分发的时候，只有前一个事件（如ACTION_DOWN）返回true，才会收到ACTION_MOVE和ACTION_UP的事件。具体这句话很多博客都说了，但是具体含义是什么呢？我们来看一下下面的具体分析。</p>
+<p>上面提到过了，事件如果不被打断的话是会不断往下传到叶子层（View），然后又不断回传到Activity，dispatchTouchEvent 和 onTouchEvent 可以通过return true 消费事件，终结事件传递，而onInterceptTouchEvent 并不能消费事件，它相当于是一个分叉口起到分流导流的作用，ACTION_MOVE和ACTION_UP 会在哪些函数被调用，之前说了并不是哪个函数收到了ACTION_DOWN，就会收到 ACTION_MOVE 等后续的事件的。<br>下面通过几张图看看不同场景下，ACTION_MOVE事件和ACTION_UP事件的具体走向并总结一下规律。</p>
+<p><strong>1、我们在ViewGroup1 的dispatchTouchEvent 方法返回true消费这次事件</strong></p>
+<p>ACTION_DOWN 事件从（Activity的dispatchTouchEvent）--------&gt; （ViewGroup1 的dispatchTouchEvent） 后结束传递，事件被消费（如下图红色的箭头代码ACTION_DOWN 事件的流向）。</p>
+<pre class="hljs coq"><code class="coq">//打印日志
+Activity | <span class="hljs-type">dispatchTouchEvent</span> --&gt; ACTION_DOWN 
+ViewGroup1 | <span class="hljs-type">dispatchTouchEvent</span> --&gt; ACTION_DOWN
+----&gt;消费</code></pre>
+<div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-59e3eb0d827f105c.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-59e3eb0d827f105c.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption"></div>
+</div>
+<p>在这种场景下ACTION_MOVE和ACTION_UP 将如何呢，看下面的打出来的日志</p>
+<pre class="hljs asciidoc"><code class="asciidoc">Activity | dispatchTouchEvent --&gt; ACTION<span class="hljs-emphasis">_MOVE 
+ViewGroup1 | dispatchTouchEvent --&gt; ACTION_</span>MOVE
+<span class="hljs-code">----
+TouchEventActivity | dispatchTouchEvent --&gt; ACTION_UP 
+ViewGroup1 | dispatchTouchEvent --&gt; ACTION_UP
+----</span></code></pre>
+<p>下图中<br>红色的箭头代表ACTION_DOWN 事件的流向<br>蓝色的箭头代表ACTION_MOVE 和 ACTION_UP 事件的流向<br></p><div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-1784be236d2060fb.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-1784be236d2060fb.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption"></div>
+</div>
+<p><strong>2、我们在ViewGroup2 的dispatchTouchEvent 返回true消费这次事件</strong></p>
+<pre class="hljs coq"><code class="coq">Activity | <span class="hljs-type">dispatchTouchEvent</span> --&gt; ACTION_DOWN 
+ViewGroup1 | <span class="hljs-type">dispatchTouchEvent</span> --&gt; ACTION_DOWN
+ViewGroup1 | <span class="hljs-type">onInterceptTouchEvent</span> --&gt; ACTION_DOWN
+ViewGroup2 | <span class="hljs-type">dispatchTouchEvent</span> --&gt; ACTION_DOWN
+----&gt;消费
+Activity | <span class="hljs-type">dispatchTouchEvent</span> --&gt; ACTION_MOVE 
+ViewGroup1 | <span class="hljs-type">dispatchTouchEvent</span> --&gt; ACTION_MOVE
+ViewGroup1 | <span class="hljs-type">onInterceptTouchEvent</span> --&gt; ACTION_MOVE
+ViewGroup2 | <span class="hljs-type">dispatchTouchEvent</span> --&gt; ACTION_MOVE
+----
+TouchEventActivity | <span class="hljs-type">dispatchTouchEvent</span> --&gt; ACTION_UP 
+ViewGroup1 | <span class="hljs-type">dispatchTouchEvent</span> --&gt; ACTION_UP
+ViewGroup1 | <span class="hljs-type">onInterceptTouchEvent</span> --&gt; ACTION_UP
+ViewGroup2 | <span class="hljs-type">dispatchTouchEvent</span> --&gt; ACTION_UP
+----</code></pre>
+<p>红色的箭头代表ACTION_DOWN 事件的流向<br>蓝色的箭头代表ACTION_MOVE 和 ACTION_UP 事件的流向<br></p><div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-f1d9edbc21e955c8.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-f1d9edbc21e955c8.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption">Paste_Image.png</div>
+</div>
+<p><strong>3、我们在View 的dispatchTouchEvent 返回true消费这次事件</strong><br>这个我不就画图了，效果和在ViewGroup2 的dispatchTouchEvent return true的差不多，同样的收到ACTION_DOWN 的dispatchTouchEvent函数都能收到 ACTION_MOVE和ACTION_UP。<br><strong>所以我们就基本可以得出结论如果在某个控件的dispatchTouchEvent 返回true消费终结事件，那么收到ACTION_DOWN 的函数也能收到 ACTION_MOVE和ACTION_UP。</strong></p>
+<p><strong>4、我们在View 的onTouchEvent 返回true消费这次事件</strong><br>红色的箭头代表ACTION_DOWN 事件的流向<br>蓝色的箭头代表ACTION_MOVE 和 ACTION_UP 事件的流向<br></p><div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-d53e3f680ba1fdd1.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-d53e3f680ba1fdd1.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption"></div>
+</div>
+<p><strong>5、我们在ViewGroup 2 的onTouchEvent 返回true消费这次事件</strong><br>红色的箭头代表ACTION_DOWN 事件的流向<br>蓝色的箭头代表ACTION_MOVE 和 ACTION_UP 事件的流向</p>
+<div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-e1e9739c0826f9f3.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-e1e9739c0826f9f3.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption"></div>
+</div><p><br><strong>6、我们在ViewGroup 1 的onTouchEvent 返回true消费这次事件</strong><br>红色的箭头代表ACTION_DOWN 事件的流向<br>蓝色的箭头代表ACTION_MOVE 和 ACTION_UP 事件的流向<br></p><div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-e78685608fced6a0.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-e78685608fced6a0.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption"></div>
+</div>
+<p><strong>7、我们在Activity 的onTouchEvent 返回true消费这次事件</strong><br>红色的箭头代表ACTION_DOWN 事件的流向<br>蓝色的箭头代表ACTION_MOVE 和 ACTION_UP 事件的流向<br></p><div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-b122baf33744975d.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-b122baf33744975d.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption"></div>
+</div>
+<p><strong>8、我们在View的dispatchTouchEvent 返回false并且Activity 的onTouchEvent 返回true消费这次事件</strong><br>红色的箭头代表ACTION_DOWN 事件的流向<br>蓝色的箭头代表ACTION_MOVE 和 ACTION_UP 事件的流向<br></p><div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-c1840919f1c95447.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-c1840919f1c95447.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption"></div>
+</div>
+<p><strong>9、我们在View的dispatchTouchEvent 返回false并且ViewGroup 1 的onTouchEvent 返回true消费这次事件</strong><br>红色的箭头代表ACTION_DOWN 事件的流向<br>蓝色的箭头代表ACTION_MOVE 和 ACTION_UP 事件的流向<br></p><div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-7026c3e2fc1b0fa8.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-7026c3e2fc1b0fa8.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption"></div>
+</div>
+<p><strong>10、我们在View的dispatchTouchEvent 返回false并且在ViewGroup 2 的onTouchEvent 返回true消费这次事件</strong><br>红色的箭头代表ACTION_DOWN 事件的流向<br>蓝色的箭头代表ACTION_MOVE 和 ACTION_UP 事件的流向<br></p><div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-4757fd1879a9ba4e.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-4757fd1879a9ba4e.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption"></div>
+</div>
+<p><strong>11、我们在ViewGroup2的dispatchTouchEvent 返回false并且在ViewGroup1 的onTouchEvent返回true消费这次事件</strong><br>红色的箭头代表ACTION_DOWN 事件的流向<br>蓝色的箭头代表ACTION_MOVE 和 ACTION_UP 事件的流向<br></p><div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-1b11afac93b12c53.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-1b11afac93b12c53.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption"></div>
+</div>
+<p><strong>12、我们在ViewGroup2的onInterceptTouchEvent 返回true拦截此次事件并且在ViewGroup 1 的onTouchEvent返回true消费这次事件。</strong><br>红色的箭头代表ACTION_DOWN 事件的流向<br>蓝色的箭头代表ACTION_MOVE 和 ACTION_UP 事件的流向<br></p><div class="image-package">
+<img src="./图解 Android 事件分发机制 - 简书_files/966283-4713e647448ce48f.png" data-original-src="http://upload-images.jianshu.io/upload_images/966283-4713e647448ce48f.png?imageMogr2/auto-orient/strip%7CimageView2/2" style="cursor: zoom-in;"><br><div class="image-caption"></div>
+</div>
+<p>一下子画了好多图，还有好几种情况就不再画了，相信你也看出规律了，对于在onTouchEvent消费事件的情况：<strong>在哪个View的onTouchEvent 返回true，那么ACTION_MOVE和ACTION_UP的事件从上往下传到这个View后就不再往下传递了，而直接传给自己的onTouchEvent 并结束本次事件传递过程。</strong></p>
+<p>对于ACTION_MOVE、ACTION_UP总结：<strong>ACTION_DOWN事件在哪个控件消费了（return true），  那么ACTION_MOVE和ACTION_UP就会从上往下（通过dispatchTouchEvent）做事件分发往下传，就只会传到这个控件，不会继续往下传，如果ACTION_DOWN事件是在dispatchTouchEvent消费，那么事件到此为止停止传递，如果ACTION_DOWN事件是在onTouchEvent消费的，那么会把ACTION_MOVE或ACTION_UP事件传给该控件的onTouchEvent处理并结束传递。</strong></p>
+<p> <strong> tips : 最近刚做了一个自定义控件，里面做了不少事件分发的处理和交互，个人是觉得可以当做本篇文章的一个实践，大家可以看下源码事件分发相关的的部分代码，可能更有体会，链接地址：<a href="https://github.com/Kelin-Hong/CalendarListView" target="_blank">CalendarListView</a></strong></p>
+<blockquote><p><strong>注：【转载请注明，问题可提问，喜欢可打赏，博客持续更新，欢迎关注】</strong></p></blockquote>
+
+        </div>
+        <!--  -->
+
+        <div class="show-foot">
+          <a class="notebook" href="http://www.jianshu.com/nb/4208744">
+            <i class="iconfont ic-search-notebook"></i> <span>Android 干货</span>
+</a>          <div class="copyright" data-toggle="tooltip" data-html="true" data-original-title="转载请联系作者获得授权，并标注“简书作者”。">
+            © 著作权归作者所有
+          </div>
+          <div class="modal-wrap" data-report-note="">
+            <a id="report-modal">举报文章</a>
+          </div>
+        </div>
+    </div>
+
+      <div class="support-author"> <p>如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作！</p> <div class="btn btn-pay">打赏支持</div> <div class="supporter"> <ul class="support-list"> <li> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/73b97eea5d05"><img src="./图解 Android 事件分发机制 - 简书_files/28ec3310dfa6.jpg"></a>  </li><li> <a class="avatar" target="_blank" href="javascript:void(0)"><img src="./图解 Android 事件分发机制 - 简书_files/alipay-c192a7455bcf21ab8dd23d96679fc1c0.png"></a>  </li><li> <a class="avatar" target="_blank" href="javascript:void(0)"><img src="./图解 Android 事件分发机制 - 简书_files/alipay-c192a7455bcf21ab8dd23d96679fc1c0.png"></a>  </li><li> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/5ffe9ada44b0"><img src="./图解 Android 事件分发机制 - 简书_files/8-a356878e44b45ab268a3b0bbaaadeeb7.jpg"></a>  </li><li> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/5688032f18fb"><img src="./图解 Android 事件分发机制 - 简书_files/1ca7519b4f4c.jpg"></a>  </li><li> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/f3d75e90904a"><img src="./图解 Android 事件分发机制 - 简书_files/6b114a0ddea8.jpg"></a>  </li><li> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/7ea7e9945ab6"><img src="./图解 Android 事件分发机制 - 简书_files/fb173d6a3b78.jpg"></a>  </li> </ul> <span id="reward_user">等13人</span> </div>   </div>
+
+    <div class="meta-bottom">
+      <div class="btn like-group"> <div class="btn-like"> <a><i class="iconfont ic-like"></i>喜欢</a>   </div> <div class="modal-wrap"> <a>350</a> </div> </div> 
+      <div class="share-group">
+        <a class="share-circle" data-action="weixin-share" data-toggle="tooltip" data-original-title="分享到微信">
+          <i class="iconfont ic-wechat"></i>
+        </a>
+        <a class="share-circle" data-toggle="tooltip" href="javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f='http://v.t.sina.com.cn/share/share.php?appkey=1881139527',u=z||d.location,p=['&url=',e(u),'&title=',e(t||d.title),'&source=',e(r),'&sourceUrl=',e(l),'&content=',c||'gb2312','&pic=',e(p||'')].join('');function%20a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=440,height=430,left=',(s.width-440)/2,',top=',(s.height-430)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,'','','http://cwb.assets.jianshu.io/notes/images/4416578/weibo/image_fceb000a7679.jpg', '推荐 @Kelin-Hong 的文章《图解 Android 事件分发机制》（ 分享自 @简书 ）','http://www.jianshu.com/p/e99b5e8bd67b','页面编码gb2312|utf-8默认gb2312'));" data-original-title="分享到微博">
+          <i class="iconfont ic-weibo"></i>
+        </a>
+          <a class="share-circle" data-toggle="tooltip" href="http://cwb.assets.jianshu.io/notes/images/4416578/weibo/image_fceb000a7679.jpg" target="_blank" data-original-title="下载长微博图片">
+            <i class="iconfont ic-picture"></i>
+          </a>
+        <a class="share-circle more-share" data-toggle="popover" data-placement="top" data-html="true" data-trigger="focus" href="javascript:void(0);" data-content="
+          &lt;ul class=&quot;share-list&quot;&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=&#39;+e(&#39;http://www.jianshu.com/p/e99b5e8bd67b&#39;)+&#39;&amp;title=&#39;+e(&#39;推荐 Kelin 的文章《图解 Android 事件分发机制》&#39;),x=function(){if(!window.open(r,&#39;qzone&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-zone&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到QQ空间&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://twitter.com/share?url=&#39;+e(&#39;http://www.jianshu.com/p/e99b5e8bd67b&#39;)+&#39;&amp;text=&#39;+e(&#39;推荐 Kelin 的文章《图解 Android 事件分发机制》（ 分享自 @jianshucom ）&#39;)+&#39;&amp;related=&#39;+e(&#39;jianshucom&#39;),x=function(){if(!window.open(r,&#39;twitter&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-twitter&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Twitter&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://www.facebook.com/dialog/share?app_id=483126645039390&amp;display=popup&amp;href=http://www.jianshu.com/p/e99b5e8bd67b&#39;,x=function(){if(!window.open(r,&#39;facebook&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-facebook&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Facebook&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://plus.google.com/share?url=&#39;+e(&#39;http://www.jianshu.com/p/e99b5e8bd67b&#39;),x=function(){if(!window.open(r,&#39;google_plus&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-google&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Google+&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,s1=window.getSelection,s2=d.getSelection,s3=d.selection,s=s1?s1():s2?s2():s3?s3.createRange().text:&#39;&#39;,r=&#39;http://www.douban.com/recommend/?url=&#39;+e(&#39;http://www.jianshu.com/p/e99b5e8bd67b&#39;)+&#39;&amp;title=&#39;+e(&#39;图解 Android 事件分发机制&#39;)+&#39;&amp;sel=&#39;+e(s)+&#39;&amp;v=1&#39;,x=function(){if(!window.open(r,&#39;douban&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r+&#39;&amp;r=1&#39;};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})()&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-douban&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到豆瓣&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+        " data-original-title="" title="">更多分享</a>
+      </div>
+    </div>
+    <div class="comment-list" id="vue_comment"> <form class="new-comment"> <a class="avatar"><img src="./图解 Android 事件分发机制 - 简书_files/14-0651acff782e7a18653d7530d6b27661.jpg"></a> <textarea placeholder="写下你的评论..."></textarea>  </form>  <div class="normal-comment-list" id="normal-comment-list"> <div class="top"> <span>123条评论</span> <a class="author-only">只看作者</a> <a class="close-btn" style="display: none;">关闭评论</a> <div class="pull-right"> <a class="active">按时间正序</a><a>按时间倒序</a><a>按喜欢排序</a> </div> </div>   <div class="comment" id="comment-4608905"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/42d17c7f191c"><img src="./图解 Android 事件分发机制 - 简书_files/13-394c31a9cb492fcb39c27422ca7d2815.jpg"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/42d17c7f191c">阿水哥哥</a>  <div class="meta"> <span>47楼 · 2016.10.05 22:18</span> </div> </div> </div> <div class="comment-wrap"> <p>你好, 我觉得你总结的很好, 但是有一个建议, 这些总结肯定都是来自于源码分析, 如果不配上源码的分析过程, 那么对于读者来说读你的文章是一个纯记忆的过程,你觉得呢?</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>1人赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list hide">   </div> </div><div class="comment" id="comment-4685015"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/aa076508e34f"><img src="./图解 Android 事件分发机制 - 简书_files/f75a4a74c182.jpg"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/aa076508e34f">hayabusa_l</a>  <div class="meta"> <span>48楼 · 2016.10.09 00:33</span> </div> </div> </div> <div class="comment-wrap"> <p>让我这啥都不懂的小白都一下子明朗了。。。。谢谢大神</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>1人赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list hide">   </div> </div><div class="comment" id="comment-4956260"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/0f100e7189b2"><img src="./图解 Android 事件分发机制 - 简书_files/11-4d7c6ca89f439111aff57b23be1c73ba.jpg"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/0f100e7189b2">阿木1234</a>  <div class="meta"> <span>49楼 · 2016.10.19 19:30</span> </div> </div> </div> <div class="comment-wrap"> <p>我在ViewGroup中未看到OnTouchEvent的接口，你这个指的是自定义的ViewGroup中的OnTouchEvent 接口是吗？<br>还有一个问题就是OntouchEvent 怎么会从View 往Activity 传递呢，从下往上，源码中的关键信息在哪里呢？好像没有找到；<br>ViewGroup中的onTouhEvent()方法，源码中的 调用位置 是在哪里呢？？？View中的dispathTouchEvent 中的onTouhEvent（）返回false, 怎么就到了ViewGruop中的onTouhEvent</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list"> <div class="sub-comment" id="comment-5322817"> <p><a target="_blank" href="http://www.jianshu.com/u/942d45d61f59">Kelin</a>：<a href="http://www.jianshu.com/users/0f100e7189b2" class="maleskine-author" target="_blank" data-user-slug="0f100e7189b2">@阿木1234</a>  ViewGroup的 dispatchTouchEvent方法里 先调用它自己的拦截器，没拦截调用自己child的dispatchTouchEvent 不断递归下去，最后再调用自己的onTouhEvent，所有给你的错觉是从下往上，其实只是处理完孩子的事再来处理自己的onTouhEvent 而已 <img src="./图解 Android 事件分发机制 - 简书_files/smile.png" alt=":smile:" title=":smile:" class="emoji" width="20" height="20"> </p> <div class="sub-tool-group"> <span>2016.11.03 15:22</span> <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> <div class="sub-comment more-comment">  <a class="add-comment-btn"><i class="iconfont ic-subcomment"></i><span>添加新评论</span></a>     </div>  </div> </div><div class="comment" id="comment-4977442"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/fb4e802ea315"><img src="./图解 Android 事件分发机制 - 简书_files/e30877d1915d"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/fb4e802ea315">void_ouwenjie</a>  <div class="meta"> <span>50楼 · 2016.10.20 15:20</span> </div> </div> </div> <div class="comment-wrap"> <p>再加上 setOnTouchListener()  和 setOnClickListener() 的分析就完美了，哈哈。<br>如果 mOnTouchListener.onTouch(this, event) 返回了 true ，那么 onTouchEvent(event) 是没机会执行了。<br></p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list"> <div class="sub-comment" id="comment-5069045"> <p><a target="_blank" href="http://www.jianshu.com/u/942d45d61f59">Kelin</a>：<a href="http://www.jianshu.com/users/fb4e802ea315" class="maleskine-author" target="_blank" data-user-slug="fb4e802ea315">@void_ouwenjie</a> 恩恩 谢谢建议 <img src="./图解 Android 事件分发机制 - 简书_files/smile.png" alt=":smile:" title=":smile:" class="emoji" width="20" height="20"> </p> <div class="sub-tool-group"> <span>2016.10.24 15:26</span> <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> <div class="sub-comment more-comment">  <a class="add-comment-btn"><i class="iconfont ic-subcomment"></i><span>添加新评论</span></a>     </div>  </div> </div><div class="comment" id="comment-5003165"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/25c8d80d355f"><img src="./图解 Android 事件分发机制 - 简书_files/13-394c31a9cb492fcb39c27422ca7d2815.jpg"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/25c8d80d355f">ZoroL</a>  <div class="meta"> <span>51楼 · 2016.10.21 17:31</span> </div> </div> </div> <div class="comment-wrap"> <p>啊啊啊，看完收益颇多。然后点进 github 看到中文名才发现原来咱们认识。非常感谢。</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list"> <div class="sub-comment" id="comment-5069032"> <p><a target="_blank" href="http://www.jianshu.com/u/942d45d61f59">Kelin</a>：<a href="http://www.jianshu.com/users/25c8d80d355f" class="maleskine-author" target="_blank" data-user-slug="25c8d80d355f">@ZoroL</a> 你是哪位呢？  <img src="./图解 Android 事件分发机制 - 简书_files/grin.png" alt=":grin:" title=":grin:" class="emoji" width="20" height="20"> </p> <div class="sub-tool-group"> <span>2016.10.24 15:26</span> <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div><div class="sub-comment" id="comment-5339020"> <p><a target="_blank" href="http://www.jianshu.com/u/25c8d80d355f">ZoroL</a>：<a href="http://www.jianshu.com/users/942d45d61f59" class="maleskine-author" target="_blank" data-user-slug="942d45d61f59">@Kelin</a> LuGQ，华科软院的。</p> <div class="sub-tool-group"> <span>2016.11.04 08:06</span> <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> <div class="sub-comment more-comment">  <a class="add-comment-btn"><i class="iconfont ic-subcomment"></i><span>添加新评论</span></a>     </div>  </div> </div><div class="comment" id="comment-5041006"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/6d5f5610014f"><img src="./图解 Android 事件分发机制 - 简书_files/e3ec103b58f3"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/6d5f5610014f">爱吃鱼的</a>  <div class="meta"> <span>52楼 · 2016.10.23 12:03</span> </div> </div> </div> <div class="comment-wrap"> <p>虽然一开始看不懂图，发现自己写个demo，自己去测试打印下流程，发现在回来看这篇博客，基本看懂了</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>1人赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list hide">   </div> </div><div class="comment" id="comment-5141118"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/aacbedefc2fd"><img src="./图解 Android 事件分发机制 - 简书_files/15-a7ac401939dd4df837e3bbf82abaa2a8.jpg"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/aacbedefc2fd">zhangyanshi</a>  <div class="meta"> <span>53楼 · 2016.10.27 11:52</span> </div> </div> </div> <div class="comment-wrap"> <p>有一点不明白，disPatchTouchEvent返回true的前提是onTouch返回了true或者onTouchEvent返回了true，在默认onTouch返回false的情况下，博主说的disPatchTouchEvent返回ture也就是onTouchEvent返回了true。，由于onTouch的优先级比onTouchEvent高，那么博主在讨论disPatchTouchEvent返回true的情况下，是否应该标注onTouch返回了true？</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list hide">   </div> </div><div class="comment" id="comment-5267981"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/746c51bb9a52"><img src="./图解 Android 事件分发机制 - 简书_files/3-9a2bcc21a5d89e21dafc73b39dc5f582.jpg"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/746c51bb9a52">13699149987</a>  <div class="meta"> <span>54楼 · 2016.11.01 14:24</span> </div> </div> </div> <div class="comment-wrap"> <p>拜读了您的文章 受益匪浅 请问能否再讲讲onTouch onClick onTouchEvent 这几个方法的区别</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list"> <div class="sub-comment" id="comment-5268145"> <p><a target="_blank" href="http://www.jianshu.com/u/746c51bb9a52">13699149987</a>：<a href="http://www.jianshu.com/users/746c51bb9a52" class="maleskine-author" target="_blank" data-user-slug="746c51bb9a52">@13699149987</a> 补充请教下 requestDisallowInterceptTouchEvent（true）这个方法 如果我在子View中请求父View不拦截某个事件 那是不是父View的interceptTouchEvent()即使返回true 这个父View也不会拦截这个事件了？另外这个方法对ACTION_MOVE和ACTION_DOWN事件的传递会不会起到变化作用？</p> <div class="sub-tool-group"> <span>2016.11.01 14:33</span> <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div><div class="sub-comment" id="comment-5322965"> <p><a target="_blank" href="http://www.jianshu.com/u/942d45d61f59">Kelin</a>：<a href="http://www.jianshu.com/users/746c51bb9a52" class="maleskine-author" target="_blank" data-user-slug="746c51bb9a52">@13699149987</a> 我看了源码，如果requestDisallowInterceptTouchEvent true） interceptTouchEvent就不会调了，ACTION_MOVE和ACTION_DOWN 应该不会有变化</p> <div class="sub-tool-group"> <span>2016.11.03 15:29</span> <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> <div class="sub-comment more-comment">  <a class="add-comment-btn"><i class="iconfont ic-subcomment"></i><span>添加新评论</span></a>     </div>  </div> </div><div class="comment" id="comment-5272899"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/746c51bb9a52"><img src="./图解 Android 事件分发机制 - 简书_files/3-9a2bcc21a5d89e21dafc73b39dc5f582.jpg"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/746c51bb9a52">13699149987</a>  <div class="meta"> <span>55楼 · 2016.11.01 17:59</span> </div> </div> </div> <div class="comment-wrap"> <p>您好 <a href="http://blog.csdn.net/lfdfhl/article/details/51603088" rel="nofollow" target="_blank">http://blog.csdn.net/lfdfhl/article/details/51603088</a><br>这篇文章说： 如果在View的onTouchEvent方法中返回super.onTouchEvent的话 那么该View的父容器就不会接收到这个事件了 <br>但是您这个文章中说onTouchEvent如果返回super.onTouchEvent，那么这个事件还会传到它的父容器的onTouchEvent中 您可以大概看看这篇文章 不知道那个对的？还是我理解错了</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list"> <div class="sub-comment" id="comment-5637936"> <p><a target="_blank" href="http://www.jianshu.com/u/942d45d61f59">Kelin</a>：<a href="http://www.jianshu.com/users/746c51bb9a52" class="maleskine-author" target="_blank" data-user-slug="746c51bb9a52">@13699149987</a> 这个简单，你写个Demo验一下就最清楚了也最信得过，几分钟的事 <img src="./图解 Android 事件分发机制 - 简书_files/smile.png" alt=":smile:" title=":smile:" class="emoji" width="20" height="20"> 我只能说 我的肯定没问题，因为我写Demo看输出的log了</p> <div class="sub-tool-group"> <span>2016.11.14 15:50</span> <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> <div class="sub-comment more-comment">  <a class="add-comment-btn"><i class="iconfont ic-subcomment"></i><span>添加新评论</span></a>     </div>  </div> </div><div class="comment" id="comment-5829420"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/22ee03b8dc8f"><img src="./图解 Android 事件分发机制 - 简书_files/5cb985e540ba"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/22ee03b8dc8f">22ee03b8dc8f</a>  <div class="meta"> <span>56楼 · 2016.11.21 15:19</span> </div> </div> </div> <div class="comment-wrap"> <p>难虽然不难<br><br>但是楼主你用如此简单的话就描述出来了<br><br>简直叼叼叼</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>1人赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list hide">   </div> </div><div class="comment" id="comment-6171043"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/a55eb6e806bb"><img src="./图解 Android 事件分发机制 - 简书_files/7-0993d41a595d6ab6ef17b19496eb2f21.jpg"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/a55eb6e806bb">小猪在哪</a>  <div class="meta"> <span>57楼 · 2016.12.05 01:01</span> </div> </div> </div> <div class="comment-wrap"> <p>非常清晰</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list hide">   </div> </div><div class="comment" id="comment-6239549"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/8f3a4e0332af"><img src="./图解 Android 事件分发机制 - 简书_files/12-aeeea4bedf10f2a12c0d50d626951489.jpg"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/8f3a4e0332af">mxy585</a>  <div class="meta"> <span>58楼 · 2016.12.07 16:33</span> </div> </div> </div> <div class="comment-wrap"> <p>可以，很清晰，学习了！</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list hide">   </div> </div><div class="comment" id="comment-6522926"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/73b97eea5d05"><img src="./图解 Android 事件分发机制 - 简书_files/28ec3310dfa6(1).jpg"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/73b97eea5d05">Ticker_FH</a>  <div class="meta"> <span>59楼 · 2016.12.19 10:46</span> </div> </div> </div> <div class="comment-wrap"> <p>对事件分发机制更加了解了。大谢，手下收地的膝盖和进贡 <img src="./图解 Android 事件分发机制 - 简书_files/stuck_out_tongue_closed_eyes.png" alt=":stuck_out_tongue_closed_eyes:" title=":stuck_out_tongue_closed_eyes:" class="emoji" width="20" height="20"> </p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>2人赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list hide">   </div> </div><div class="comment" id="comment-6723120"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/cefcae4f6419"><img src="./图解 Android 事件分发机制 - 简书_files/2-9636b13945b9ccf345bc98d0d81074eb.jpg"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/cefcae4f6419">清心极乐</a>  <div class="meta"> <span>60楼 · 2016.12.27 19:57</span> </div> </div> </div> <div class="comment-wrap"> <p>Kelin你好：本来想跟你私聊的,不知道怎么私聊SO只在这留言了,分发机制的文章真的受益良多,但是在写Demo的时候发现两个地方与你写的有点不同。1、在View的onTouchEvent里只有return false将事件传到父控件的onTouchEvent而return super.xxx()和return true;是将事件消费掉。2、在ViewGroup的onTouchEvent里return true 此控件以下的View的Down事件并没有触发,看了你的截图View以下的Down事件也触发了,这和我测试的不一致。希望得到你的回复,谢谢。</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>1人赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list"> <div class="sub-comment" id="comment-6758560"> <p><a target="_blank" href="http://www.jianshu.com/u/942d45d61f59">Kelin</a>：<a href="http://www.jianshu.com/users/cefcae4f6419" class="maleskine-author" target="_blank" data-user-slug="cefcae4f6419">@清心极乐</a> 你好，第一个问题 return super.xxx() 是消费掉还是传回父控件，这个取决你的View的上层实现，如果你的View是button那么默认是return true的，当然你的ViewGroup收不到了，第二个问题不太懂你想表达的意思，你可以再说详细一些吗？ <img src="./图解 Android 事件分发机制 - 简书_files/smile.png" alt=":smile:" title=":smile:" class="emoji" width="20" height="20"> </p> <div class="sub-tool-group"> <span>2016.12.29 10:53</span> <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div><div class="sub-comment" id="comment-6769846"> <p><a target="_blank" href="http://www.jianshu.com/u/cefcae4f6419">清心极乐</a>：<a href="http://www.jianshu.com/users/942d45d61f59" class="maleskine-author" target="_blank" data-user-slug="942d45d61f59">@Kelin</a> 你好，先说第一个问题吧，你的意思是不同控件是否传递到父控件是不一样的，我的Demo用的是TextView,return super.xxx()就直接消费掉了，第二个问题是如果父控件的onTouchEvent方法里return true那么down事件不会再传递给子控件。</p> <div class="sub-tool-group"> <span>2016.12.29 20:06</span> <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div><div class="sub-comment" id="comment-6788844"> <p><a target="_blank" href="http://www.jianshu.com/u/942d45d61f59">Kelin</a>：<a href="http://www.jianshu.com/users/cefcae4f6419" class="maleskine-author" target="_blank" data-user-slug="cefcae4f6419">@清心极乐</a> 你看一下最上面的图或者第三张图，ViewGroup的onTouchEvent方法被调用的三个来源，不一定子View的onTouchEvent一定会被调用，当然其中一个来源是此控件以下的View的onTouchEvent方法，onTouchEvent 的事件流是从下往上的，你再仔细看下图哈</p> <div class="sub-tool-group"> <span>2016.12.30 16:40</span> <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> <div class="sub-comment more-comment">  <a class="add-comment-btn"><i class="iconfont ic-subcomment"></i><span>添加新评论</span></a>  <span class="line-warp"> 还有1条评论， <a>展开查看</a> </span>   </div>  </div> </div><div class="comment" id="comment-6878458"> <div> <div class="author"> <a class="avatar" target="_blank" href="http://www.jianshu.com/u/0bc95b58ed61"><img src="./图解 Android 事件分发机制 - 简书_files/6-fd30f34c8641f6f32f5494df5d6b8f3c.jpg"></a> <div class="info"> <a class="name" target="_blank" href="http://www.jianshu.com/u/0bc95b58ed61">xiexh000</a>  <div class="meta"> <span>61楼 · 2017.01.03 18:13</span> </div> </div> </div> <div class="comment-wrap"> <p>博主真的好赞，写得很详细，非常受用。提一个问题，如果我在ViewGroup 调super.dispatchTouchEvent  但是我返回true,   会继续分发，子view 没有消耗事件，最终会在ViewGroup onTouchEvent中消费。 你的图中true直接消费估计是没有考虑到这种例子，还是消费也包括了这种情况；子view 如果消耗了， 分发就停在了子view消费的地方，所以dispatchTouchEvent   return true  不一定就能消费事件。</p> <div class="tool-group"> <a> <i class="iconfont ic-zan"></i> <span>赞</span>  </a>   <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> </div> <div class="sub-comment-list"> <div class="sub-comment" id="comment-6924589"> <p><a target="_blank" href="http://www.jianshu.com/u/942d45d61f59">Kelin</a>：有点不太明白你说的这句话”如果我在ViewGroup 调super.dispatchTouchEvent 但是我返回true“，是指什么？ 如果在ViewGroup 的dispatchTouchEvent return true时间就会被消费，如果调super.dispatchTouchEvent 会走到onInterceptTouchEvent，具体你可以再描述详细些，我再看看呢<img src="./图解 Android 事件分发机制 - 简书_files/smile.png" alt=":smile:" title=":smile:" class="emoji" width="20" height="20"> </p> <div class="sub-tool-group"> <span>2017.01.05 13:23</span> <a><i class="iconfont ic-comment"></i><span>回复</span></a>   <a class="report"><span>举报</span></a>   </div> </div> <div class="sub-comment more-comment">  <a class="add-comment-btn"><i class="iconfont ic-subcomment"></i><span>添加新评论</span></a>     </div>  </div> </div> <div class="comments-placeholder" style="display: none;"> <div class="author"> <div class="avatar"></div> <div class="info"> <div class="name"></div> <div class="meta"></div> </div> </div> <div class="text"></div> <div class="text animation-delay"></div> <div class="tool-group"> <i class="iconfont ic-zan-active"></i><div class="zan"></div> <i class="iconfont ic-list-comments"></i><div class="zan"></div> </div> </div>  </div> <ul class="pagination"> <li><a>上一页</a></li> <li> <a>1</a> </li><li> <a>2</a> </li><li> <a>3</a> </li> <li><a href="javascript:void(null)" class="active">4</a></li> <li> <a>5</a> </li> <li><a>下一页</a></li> </ul>  </div>
+  </div>
+
+  <div class="side-tool">
+    <ul>
+      <li data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="回到顶部">
+        <a href="http://www.jianshu.com/p/e99b5e8bd67b#"><i class="iconfont ic-backtop"></i></a>
+      </li>
+        <li data-original-title="" title="">
+          <a data-action="toggle-bookmark-note" href="javascript:void(null);">
+            <i class="iconfont ic-mark"></i>
+</a>        </li>
+      <li data-share-note="" data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="分享文章">
+        <a data-toggle="popover" data-placement="left" data-html="true" data-trigger="focus" href="javascript:void(0);" data-content="
+          &lt;ul class=&quot;share-list&quot;&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f=&#39;http://v.t.sina.com.cn/share/share.php?appkey=1881139527&#39;,u=z||d.location,p=[&#39;&amp;url=&#39;,e(u),&#39;&amp;title=&#39;,e(t||d.title),&#39;&amp;source=&#39;,e(r),&#39;&amp;sourceUrl=&#39;,e(l),&#39;&amp;content=&#39;,c||&#39;gb2312&#39;,&#39;&amp;pic=&#39;,e(p||&#39;&#39;)].join(&#39;&#39;);function%20a(){if(!window.open([f,p].join(&#39;&#39;),&#39;mb&#39;,[&#39;toolbar=0,status=0,resizable=1,width=440,height=430,left=&#39;,(s.width-440)/2,&#39;,top=&#39;,(s.height-430)/2].join(&#39;&#39;)))u.href=[f,p].join(&#39;&#39;);};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,&#39;&#39;,&#39;&#39;,&#39;http://cwb.assets.jianshu.io/notes/images/4416578/weibo/image_fceb000a7679.jpg&#39;, &#39;推荐 @Kelin-Hong 的文章《图解 Android 事件分发机制》（ 分享自 @简书 ）&#39;,&#39;http://www.jianshu.com/p/e99b5e8bd67b&#39;,&#39;页面编码gb2312|utf-8默认gb2312&#39;));&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-weibo&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到微博&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=&#39;+e(&#39;http://www.jianshu.com/p/e99b5e8bd67b&#39;)+&#39;&amp;title=&#39;+e(&#39;推荐 Kelin 的文章《图解 Android 事件分发机制》&#39;),x=function(){if(!window.open(r,&#39;qzone&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-zone&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到QQ空间&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://twitter.com/share?url=&#39;+e(&#39;http://www.jianshu.com/p/e99b5e8bd67b&#39;)+&#39;&amp;text=&#39;+e(&#39;推荐 Kelin 的文章《图解 Android 事件分发机制》（ 分享自 @jianshucom ）&#39;)+&#39;&amp;related=&#39;+e(&#39;jianshucom&#39;),x=function(){if(!window.open(r,&#39;twitter&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-twitter&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Twitter&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://www.facebook.com/dialog/share?app_id=483126645039390&amp;display=popup&amp;href=http://www.jianshu.com/p/e99b5e8bd67b&#39;,x=function(){if(!window.open(r,&#39;facebook&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-facebook&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Facebook&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://plus.google.com/share?url=&#39;+e(&#39;http://www.jianshu.com/p/e99b5e8bd67b&#39;),x=function(){if(!window.open(r,&#39;google_plus&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-google&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Google+&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,s1=window.getSelection,s2=d.getSelection,s3=d.selection,s=s1?s1():s2?s2():s3?s3.createRange().text:&#39;&#39;,r=&#39;http://www.douban.com/recommend/?url=&#39;+e(&#39;http://www.jianshu.com/p/e99b5e8bd67b&#39;)+&#39;&amp;title=&#39;+e(&#39;图解 Android 事件分发机制&#39;)+&#39;&amp;sel=&#39;+e(s)+&#39;&amp;v=1&#39;,x=function(){if(!window.open(r,&#39;douban&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r+&#39;&amp;r=1&#39;};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})()&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-douban&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到豆瓣&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+        " data-original-title="" title=""><i class="iconfont ic-share"></i></a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="note-bottom"> <div class="main"> <div class="title">被以下专题收入，发现更多相似内容</div>  <div class="include-collection">  <a class="item" href="http://www.jianshu.com/c/5139d555c94d"> <img src="./图解 Android 事件分发机制 - 简书_files/1416528891_3612.png"><div class="name">Android...</div> </a><a class="item" href="http://www.jianshu.com/c/bDHhpK"> <img src="./图解 Android 事件分发机制 - 简书_files/首页投稿.png"><div class="name">首页投稿</div> </a><a class="item" href="http://www.jianshu.com/c/fcb4441f168d"> <img src="./图解 Android 事件分发机制 - 简书_files/android.graphics.Bitmap_9de5474.jpeg"><div class="name">Android...</div> </a><a class="item" href="http://www.jianshu.com/c/c2955a70fdd6"> <img src="./图解 Android 事件分发机制 - 简书_files/1462031767.jpg"><div class="name">安卓资源收集</div> </a><a class="item" href="http://www.jianshu.com/c/3fde3b545a35"> <img src="./图解 Android 事件分发机制 - 简书_files/android.graphics.Bitmap_3d178cba.jpeg"><div class="name">Android知识</div> </a><a class="item" href="http://www.jianshu.com/c/1ba7a4520c65"> <img src="./图解 Android 事件分发机制 - 简书_files/android.graphics.Bitmap_2ea7c629.jpeg"><div class="name">Android私房菜</div> </a><a class="item" href="http://www.jianshu.com/c/d1591c322c89"> <img src="./图解 Android 事件分发机制 - 简书_files/android.graphics.Bitmap_15f127c2.jpeg"><div class="name">Android开发</div> </a><a class="item" href="http://www.jianshu.com/c/2ddd46458740"> <img src="./图解 Android 事件分发机制 - 简书_files/android.graphics.Bitmap_7a1c3d0.jpeg"><div class="name">安卓开发</div> </a><a class="item" href="http://www.jianshu.com/c/7d53feeea835"> <img src="./图解 Android 事件分发机制 - 简书_files/android.graphics.Bitmap_1d0589.jpeg"><div class="name">android...</div> </a><a class="item" href="http://www.jianshu.com/c/b0b5b0d5b6a7"> <img src="./图解 Android 事件分发机制 - 简书_files/android.graphics.Bitmap_1efe4df4.jpeg"><div class="name">android</div> </a><a class="item" href="http://www.jianshu.com/c/961dcd2b32ab"> <img src="./图解 Android 事件分发机制 - 简书_files/1463872983.jpg"><div class="name">Android</div> </a><a class="item" href="http://www.jianshu.com/c/a93122b39c0c"> <img src="./图解 Android 事件分发机制 - 简书_files/android.graphics.Bitmap_5131011.jpeg"><div class="name">Android...</div> </a><a class="item" href="http://www.jianshu.com/c/dd4e54aa7c94"> <img src="./图解 Android 事件分发机制 - 简书_files/android.graphics.Bitmap_2c89867.jpeg"><div class="name">Android</div> </a><a class="item" href="http://www.jianshu.com/c/364a1c2672df"> <img src="./图解 Android 事件分发机制 - 简书_files/7974624_103316814469_2.jpg"><div class="name">Android...</div> </a><a class="item" href="http://www.jianshu.com/c/1f37d896b5de"> <img src="./图解 Android 事件分发机制 - 简书_files/m.jpg"><div class="name">MobDevG...</div> </a> </div> <a class="load-more">加载更多...</a> </div>   </div>
+
+    <script type="application/json" data-name="page-data">{"user_signed_in":true,"locale":"zh-CN","os":"windows","read_mode":"day","read_font":"font2","current_user":{"id":4387756,"nickname":"keeponZHANG","slug":"0ad911efecfc","avatar":"http://cdn-qn0.jianshu.io/assets/default_avatar/14-0651acff782e7a18653d7530d6b27661.jpg","unread_counts":{"total":null},"has_editable_collection":false},"note_show":{"is_author":false,"is_following_author":true,"is_liked_note":false,"uuid":"c2dd5c0a-aeec-4928-97a9-b132cc40332a"},"note":{"id":4416578,"slug":"e99b5e8bd67b","user_id":966283,"notebook_id":4208744,"commentable":true,"likes_count":350,"views_count":27955,"public_wordage":3882,"comments_count":123}}</script>
+    
+    <script src="./图解 Android 事件分发机制 - 简书_files/babel-polyfill-c93680721255cdea8c6c.js"></script>
+    <script src="./图解 Android 事件分发机制 - 简书_files/web-base-c93680721255cdea8c6c.js"></script>
+<script src="./图解 Android 事件分发机制 - 简书_files/web-c93680721255cdea8c6c.js"></script>
+    
+    <script src="./图解 Android 事件分发机制 - 简书_files/entry-c93680721255cdea8c6c.js"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-35169517-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<div style="display:none">
+  <script src="./图解 Android 事件分发机制 - 简书_files/z_stat.php" language="JavaScript"></script><script src="./图解 Android 事件分发机制 - 简书_files/core.php" charset="utf-8" type="text/javascript"></script><a href="http://www.cnzz.com/stat/website.php?web_id=1258679142" target="_blank" title="站长统计">站长统计</a>
+</div>
+
+<script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+  
+
+</body></html>
