@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.keepon.customerviewdemo.R;
 
 
 public class ListenerActivity extends Activity implements View.OnTouchListener, View.OnClickListener {

@@ -34,7 +34,8 @@
         return handled;
     }`
   ```     
-* 2.加入的最后的child的dispatchTouchEvent返回false（直接调super一样），这时倒数第二层的ViewGroup的
+* 2.加入的最后的child的dispatchTouchEvent返回false（直接调super一样(一般的view，继承自view，没有设置监听listener，
+  并且也不是CLICKABLE，dispatchTouchEvent调用的onTouchEvent返回false，从而dispatchTouchEvent返回false)），这时倒数第二层的ViewGroup的
   dispatchTransformedTouchEvent会返回false，if里面的代码不会走，mFirstTouchTarget会等于null，这时代码走下去会继续调用
   dispatchTransformedTouchEvent,此时传入的child是null,所以这时会调用viewGroup父类view的dispatchTouchEvent，接着
   调用viewGroup的onTouchEvent方法（多态）（接着会回溯上去，如果都是调super实现的话，最终会到顶层viewDevorView的onTouchEvent方法，再到Activity的onTouchEvent方法。（此时down事件走完）

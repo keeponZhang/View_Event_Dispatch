@@ -13,7 +13,7 @@ public class TestLinearLayout extends LinearLayout {
     //test3
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.e("TAG", "TestLinearLayout onInterceptTouchEvent-- action=" + ev.getAction());
+        Log.w("TAG", "TestLinearLayout onInterceptTouchEvent-- action=" + ev.getAction());
         if(ev.getAction()==MotionEvent.ACTION_DOWN){
             return  false;
         }
@@ -22,13 +22,13 @@ public class TestLinearLayout extends LinearLayout {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        Log.e("TAG", "TestLinearLayout dispatchTouchEvent-- action=" + event.getAction());
+        Log.w("TAG", "TestLinearLayout dispatchTouchEvent-- action=" + event.getAction());
         return super.dispatchTouchEvent(event);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.e("TAG", "TestLinearLayout onTouchEvent-- action=" + event.getAction());
+        Log.w("TAG", "TestLinearLayout onTouchEvent-- action=" + event.getAction());
 
         return true;
     }

@@ -14,7 +14,7 @@ public class TestButton extends android.support.v7.widget.AppCompatButton {
     //test4
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        Log.e("TAG", "TestButton dispatchTouchEvent:" +event.getAction());
+        Log.d("TAG", "TestButton dispatchTouchEvent:" +event.getAction());
 //        父容器不拦截的话,不会发出cancel事件,所以如果父容器不拦截，这里不是收到Actino_Move
         if(event.getAction()==MotionEvent.ACTION_DOWN){
             return true;
@@ -30,7 +30,7 @@ public class TestButton extends android.support.v7.widget.AppCompatButton {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.e("TAG", "TestButton onTouchEvent-- action=" + event.getAction());
+        Log.d("TAG", "TestButton onTouchEvent-- action=" + event.getAction());
         boolean onTouchEvent = super.onTouchEvent(event);
         return  onTouchEvent;
     }

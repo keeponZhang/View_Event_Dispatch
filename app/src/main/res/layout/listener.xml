@@ -9,6 +9,7 @@
 		android:enabled="false"
 		android:id="@+id/my_btn"
 		android:tag="TestButton"
+		android:textAllCaps="false"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="click TestButton"/>
