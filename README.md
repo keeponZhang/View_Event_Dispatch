@@ -251,6 +251,10 @@
                             resetCancelNextUpFlag(child);
                             //加入的最后的child的dispatchTouchEvent返回true，这时倒数第二层的ViewGroup的
                              //dispatchTransformedTouchEvent会返回true，mFirstTouchTarget不为null，走到tips5
+                             
+                             //这里如果是TestLinerLayout返回了的dispatchTouchEvent返回true，
+                             // 会回调（FrameLayout(android:id.content),此时的FrameLayout的mFirstTarget还没赋值，child是TestLinearLayout,也会走addTouchTarget，
+                            //很明显此时mFirstTouchTarget会被赋值为TestLinearLayout
                             if (dispatchTransformedTouchEvent(ev, false, child, idBitsToAssign)) {
                                 // Child wants to receive touch within its bounds.
                                 mLastTouchDownTime = ev.getDownTime();
@@ -322,6 +326,7 @@
                             } else {
                                 predecessor.next = next;
                             }
+                            //这里需要注意
                             target.recycle();
                             target = next;
                             continue;
