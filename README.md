@@ -110,6 +110,7 @@
                                 } else {
                                     mLastTouchDownIndex = childIndex;
                                 }
+                                //mFirstTouchTarget被赋值了
                                 newTouchTarget = mFirstTouchTarget= addTouchTarget(child, idBitsToAssign);
                                 alreadyDispatchedToNewTouchTarget = true;
                                 break;
@@ -264,6 +265,7 @@
                                 } else {
                                     mLastTouchDownIndex = childIndex;
                                 }
+                                //mFirstTouchTarget被赋值了
                                 newTouchTarget = mFirstTouchTarget= addTouchTarget(child, idBitsToAssign);
                                 //tips4.1
                                 alreadyDispatchedToNewTouchTarget = true;
