@@ -22,6 +22,7 @@ public class ListenerActivity extends Activity implements View.OnTouchListener, 
     private TestButton   mButton;
     private MyView       mMyView;
     private TextView     mTextView;
+    public static final String TAG = "事件拦截";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,34 +55,33 @@ public class ListenerActivity extends Activity implements View.OnTouchListener, 
        mButton.setOnClickListener(this);
     }
 
-    private static final String TAG = "ListenerActivity";
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if(v.getTag()!=null){
-            Log.e("TAG", v.getTag()+" OnTouchListener--onTouch-- action="+event.getAction()+" ");
+            Log.e(TAG, v.getTag()+" OnTouchListener--onTouch-- action="+Util.getActioString(event));
         }else{
-            Log.e("TAG", this+" OnTouchListener--onTouch-- action="+event.getAction()+" ");
+            Log.e(TAG, this+" OnTouchListener--onTouch-- action="+Util.getActioString(event));
         }
         return false;
     }
 
     @Override
     public void onClick(View v) {
-        Log.e("TAG", v.getTag()+"  OnClickListener--onClick--");
+        Log.e(TAG, v.getTag()+"  OnClickListener--onClick--");
         Toast.makeText(this,"click", Toast.LENGTH_LONG).show();
     }
 
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        Log.e("TAG", " Activity dispatchTouchEvent "+ev.getAction());
-        boolean b = super.dispatchTouchEvent(ev);
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        Log.e("TAG", " Activity dispatchTouchEvent "+Util.getActioString(event));
+        boolean b = super.dispatchTouchEvent(event);
         return b;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.e("TAG", " Activity onTouchEvent "+event.getAction());
+        Log.e("TAG", " Activity onTouchEvent "+Util.getActioString(event));
         boolean b = super.onTouchEvent(event);
         return b;
     }

@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import static com.keepon.eventdispatch.ListenerActivity.TAG;
+
 public class MyView extends View {
     //修改
     public MyView(Context context, AttributeSet attrs) {
@@ -19,22 +21,23 @@ public class MyView extends View {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        Log.e("TAG", "MyView dispatchTouchEvent-- action=" + event.getAction());
+        Log.e(TAG, "MyView dispatchTouchEvent-- action=" + Util.getActioString(event));
        boolean dispatchTouchEvent = super.dispatchTouchEvent(event);
-       Log.e("TAG", "MyView dispatchTouchEvent-- return =" + dispatchTouchEvent);
+       // Log.e(TAG, "MyView dispatchTouchEvent-- return =" + dispatchTouchEvent);
 //        return dispatchTouchEvent;
-        if(event.getAction()== MotionEvent.ACTION_DOWN){
-//           getParent().requestDisallowInterceptTouchEvent(true);
-            return true;
-        }else{
-            return false;
-        }
+//         if(event.getAction()== MotionEvent.ACTION_DOWN){
+// //           getParent().requestDisallowInterceptTouchEvent(true);
+//             return true;
+//         }else{
+//             return false;
+//         }
+        return dispatchTouchEvent;
 
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.e("TAG", "MyView onTouchEvent-- action=" + event.getAction());
+        Log.e(TAG, "MyView onTouchEvent-- action=" + Util.getActioString(event));
         return super.onTouchEvent(event);
     }
 
@@ -42,7 +45,6 @@ public class MyView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         canvas.drawText("MyView",getMeasuredWidth()/2-50,50,paint);
     }
 }

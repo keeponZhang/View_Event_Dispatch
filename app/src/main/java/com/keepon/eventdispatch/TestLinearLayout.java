@@ -6,31 +6,34 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
+import static com.keepon.eventdispatch.ListenerActivity.TAG;
+
 public class TestLinearLayout extends LinearLayout {
     public TestLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
     //test3
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.w("TAG", "TestLinearLayout onInterceptTouchEvent-- action=" + ev.getAction());
-        if(ev.getAction()==MotionEvent.ACTION_DOWN){
-            return  false;
-        }
-        return false;
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        Log.w(TAG, "TestLinearLayout onInterceptTouchEvent-- action=" + Util.getActioString(event));
+        // if(event.getAction()==MotionEvent.ACTION_DOWN){
+        //     return  false;
+        // }
+        return super.onInterceptTouchEvent(event);
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        Log.w("TAG", "TestLinearLayout dispatchTouchEvent-- action=" + event.getAction());
+        Log.w(TAG, "TestLinearLayout dispatchTouchEvent-- action=" + Util.getActioString(event));
         return super.dispatchTouchEvent(event);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.w("TAG", "TestLinearLayout onTouchEvent-- action=" + event.getAction());
-
-        return true;
+        Log.w(TAG, "TestLinearLayout onTouchEvent-- action=" +Util.getActioString(event));
+        return super.onTouchEvent(event);
     }
+
+
 
 }
