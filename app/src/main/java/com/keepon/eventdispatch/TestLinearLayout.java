@@ -12,6 +12,7 @@ public class TestLinearLayout extends LinearLayout {
     public TestLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
     //test3
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
@@ -27,21 +28,21 @@ public class TestLinearLayout extends LinearLayout {
         boolean dispatchTouchEvent = false;
         Log.w(TAG, "TestLinearLayout dispatchTouchEvent-- action=" + Util.getActioString(event));
         dispatchTouchEvent = super.dispatchTouchEvent(event);
-        Log.w(TAG, "TestLinearLayout dispatchTouchEvent-- action=" + Util.getActioString(event)+
-                "  返回dispatchTouchEvent="+dispatchTouchEvent);
+        Log.w(TAG, "TestLinearLayout dispatchTouchEvent-- action=" + Util.getActioString(event) +
+                "  返回dispatchTouchEvent=" + dispatchTouchEvent);
         return dispatchTouchEvent;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean onTouchEvent = false;
-        Log.w(TAG, "TestLinearLayout onTouchEvent-- action=" +Util.getActioString(event));
-        onTouchEvent = super.onTouchEvent(event);
-        Log.w(TAG, "TestLinearLayout onTouchEvent-- action=" +Util.getActioString(event)+"  " +
-                "返回onTouchEvent="+onTouchEvent);
+        Log.w(TAG, "TestLinearLayout onTouchEvent-- action=" + Util.getActioString(event));
+        // onTouchEvent = super.onTouchEvent(event);
+        onTouchEvent = true;
+        Log.w(TAG, "TestLinearLayout onTouchEvent-- action=" + Util.getActioString(event) + "  " +
+                "返回onTouchEvent=" + onTouchEvent);
         return onTouchEvent;
     }
-
 
 
 }
