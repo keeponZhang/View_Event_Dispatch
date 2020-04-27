@@ -56,7 +56,7 @@ public class ListenerActivity extends Activity implements View.OnTouchListener, 
 //        mButton.setOnTouchListener(this);
 
 //        mButton.getParent().requestDisallowInterceptTouchEvent(false);
-        getWindow().getDecorView().setOnTouchListener(this);
+//         getWindow().getDecorView().setOnTouchListener(this);
         // getWindow().setCallback(getCallback());
 //        mButton.setOnTouchListener(this);
 

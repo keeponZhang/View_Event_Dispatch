@@ -21,8 +21,9 @@ public class MyView extends View {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
+        boolean dispatchTouchEvent = false;
         Log.e(TAG, "MyView dispatchTouchEvent-- action=" + Util.getActioString(event));
-       boolean dispatchTouchEvent = super.dispatchTouchEvent(event);
+        // dispatchTouchEvent = super.dispatchTouchEvent(event);
        // Log.e(TAG, "MyView dispatchTouchEvent-- return =" + dispatchTouchEvent);
 //        return dispatchTouchEvent;
 //         if(event.getAction()== MotionEvent.ACTION_DOWN){
