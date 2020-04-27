@@ -62,6 +62,7 @@
              }else {
                 // There are no touch targets and this action is not an initial down
                 // so this view group continues to intercept touches.
+                //如果第一次没控件消费点击事件，mFirstTouchTarget ==null，up事件再次进来的话，intercepted返回true，然后走到tips4
                  intercepted = true;
              }
 

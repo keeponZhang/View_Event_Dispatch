@@ -56,7 +56,7 @@ public class ListenerActivity extends Activity implements View.OnTouchListener, 
 //        mButton.setOnTouchListener(this);
 
 //        mButton.getParent().requestDisallowInterceptTouchEvent(false);
-//         getWindow().getDecorView().setOnTouchListener(this);
+        getWindow().getDecorView().setOnTouchListener(this);
         // getWindow().setCallback(getCallback());
 //        mButton.setOnTouchListener(this);
 
@@ -180,7 +180,7 @@ public class ListenerActivity extends Activity implements View.OnTouchListener, 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if(v.getTag()!=null){
-            Log.d(TAG, v.getTag()+" OnTouchListener--onTouch-- action="+Util.getActioString(event));
+            Log.e(TAG, v.getTag()+" OnTouchListener--onTouch-- action="+Util.getActioString(event));
         }
         return false;
     }
