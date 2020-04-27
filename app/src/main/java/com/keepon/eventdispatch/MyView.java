@@ -23,8 +23,8 @@ public class MyView extends View {
     public boolean dispatchTouchEvent(MotionEvent event) {
         boolean dispatchTouchEvent = false;
         Log.e(TAG, "MyView dispatchTouchEvent-- action=" + Util.getActioString(event));
-        // dispatchTouchEvent = super.dispatchTouchEvent(event);
-       // Log.e(TAG, "MyView dispatchTouchEvent-- return =" + dispatchTouchEvent);
+        dispatchTouchEvent = super.dispatchTouchEvent(event);
+        // Log.e(TAG, "MyView dispatchTouchEvent-- return =" + dispatchTouchEvent);
 //        return dispatchTouchEvent;
 //         if(event.getAction()== MotionEvent.ACTION_DOWN){
 // //           getParent().requestDisallowInterceptTouchEvent(true);
@@ -38,14 +38,17 @@ public class MyView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        boolean onTouchEvent = false;
         Log.e(TAG, "MyView onTouchEvent-- action=" + Util.getActioString(event));
-        return super.onTouchEvent(event);
+        onTouchEvent = super.onTouchEvent(event);
+        return onTouchEvent;
     }
 
     Paint paint = new Paint();
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawText("MyView",getMeasuredWidth()/2-50,50,paint);
+        canvas.drawText("MyView", getMeasuredWidth() / 2 - 50, 50, paint);
     }
 }

@@ -24,12 +24,13 @@ import android.widget.Toast;
 
 //https://blog.csdn.net/guolin_blog/article/details/9097463
 //https://blog.csdn.net/guolin_blog/article/details/9153747
-public class ListenerActivity extends Activity implements View.OnTouchListener, View.OnClickListener {
+public class ListenerActivity extends Activity
+        implements View.OnTouchListener, View.OnClickListener {
     //修改
     private LinearLayout mLayout;
-    private TestButton   mButton;
-    private MyView       mMyView;
-    private TextView     mTextView;
+    private TestButton mButton;
+    private MyView mMyView;
+    private TextView mTextView;
     public static final String TAG = "事件拦截";
 
     @Override
@@ -43,7 +44,7 @@ public class ListenerActivity extends Activity implements View.OnTouchListener, 
         mButton = (TestButton) this.findViewById(R.id.my_btn);
         mTextView = (TextView) this.findViewById(R.id.tv);
         View decorView = getWindow().getDecorView();
-        FrameLayout content = (FrameLayout) this.findViewById(android.R.id.content );
+        FrameLayout content = (FrameLayout) this.findViewById(android.R.id.content);
 
 
         content.setTag("AndroidContent");
@@ -61,7 +62,7 @@ public class ListenerActivity extends Activity implements View.OnTouchListener, 
 //        mButton.setOnTouchListener(this);
 
 //        mLayout.setOnClickListener(this);
-       mButton.setOnClickListener(this);
+        mButton.setOnClickListener(this);
         mButton.setTag("TestButtom");
     }
 
@@ -179,35 +180,37 @@ public class ListenerActivity extends Activity implements View.OnTouchListener, 
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if(v.getTag()!=null){
-            Log.e(TAG, v.getTag()+" OnTouchListener--onTouch-- action="+Util.getActioString(event));
+        if (v.getTag() != null) {
+            Log.e(TAG, v.getTag() + " OnTouchListener--onTouch-- action=" +
+                    Util.getActioString(event));
         }
         return false;
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getTag()!=null){
-            Log.e(TAG, v.getTag()+" OnClickListener--onClick-- action=");
+        if (v.getTag() != null) {
+            Log.e(TAG, v.getTag() + " OnClickListener--onClick-- action=");
         }
-        Toast.makeText(this,"click", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "click", Toast.LENGTH_LONG).show();
     }
-
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        Log.d(TAG, " Activity dispatchTouchEvent "+Util.getActioString(event));
-        if(event.getAction() ==MotionEvent.ACTION_UP){
+        boolean dispatchTouchEvent = false;
+        Log.d(TAG, " Activity dispatchTouchEvent " + Util.getActioString(event));
+        if (event.getAction() == MotionEvent.ACTION_UP) {
             Log.w("TAG", "ListenerActivity dispatchTouchEvent:");
         }
-        boolean b = super.dispatchTouchEvent(event);
-        return b;
+        dispatchTouchEvent = super.dispatchTouchEvent(event);
+        return dispatchTouchEvent;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d(TAG, " Activity onTouchEvent "+Util.getActioString(event));
-        boolean b = super.onTouchEvent(event);
-        return b;
+        boolean onTouchEvent = false;
+        Log.d(TAG, " Activity onTouchEvent " + Util.getActioString(event));
+        onTouchEvent = super.onTouchEvent(event);
+        return onTouchEvent;
     }
 }
