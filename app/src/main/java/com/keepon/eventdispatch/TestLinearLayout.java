@@ -25,7 +25,8 @@ public class TestLinearLayout extends LinearLayout {
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         Log.w(TAG, "TestLinearLayout dispatchTouchEvent-- action=" + Util.getActioString(event));
-        return super.dispatchTouchEvent(event);
+        // return super.dispatchTouchEvent(event);
+        return false;
     }
 
     @Override

@@ -49,19 +49,20 @@ public class ListenerActivity extends Activity implements View.OnTouchListener, 
         content.setTag("AndroidContent");
         decorView.setTag("DevorView");
 
-        content.setOnTouchListener(this);
+        // content.setOnTouchListener(this);
 //        mLayout.setOnTouchListener(this);
 //        mTextView.setOnTouchListener(this);
 //        mMyView.setOnTouchListener(this);
 //        mButton.setOnTouchListener(this);
 
 //        mButton.getParent().requestDisallowInterceptTouchEvent(false);
-        getWindow().getDecorView().setOnTouchListener(this);
+//         getWindow().getDecorView().setOnTouchListener(this);
         // getWindow().setCallback(getCallback());
 //        mButton.setOnTouchListener(this);
 
 //        mLayout.setOnClickListener(this);
        mButton.setOnClickListener(this);
+        mButton.setTag("TestButtom");
     }
 
     private Window.Callback getCallback() {
@@ -179,30 +180,33 @@ public class ListenerActivity extends Activity implements View.OnTouchListener, 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if(v.getTag()!=null){
-            Log.e(TAG, v.getTag()+" OnTouchListener--onTouch-- action="+Util.getActioString(event));
-        }else{
-            Log.e(TAG, this+" OnTouchListener--onTouch-- action="+Util.getActioString(event));
+            Log.d(TAG, v.getTag()+" OnTouchListener--onTouch-- action="+Util.getActioString(event));
         }
         return false;
     }
 
     @Override
     public void onClick(View v) {
-        Log.e(TAG, v.getTag()+"  OnClickListener--onClick--");
+        if(v.getTag()!=null){
+            Log.e(TAG, v.getTag()+" OnClickListener--onClick-- action=");
+        }
         Toast.makeText(this,"click", Toast.LENGTH_LONG).show();
     }
 
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        Log.e("TAG", " Activity dispatchTouchEvent "+Util.getActioString(event));
+        Log.d(TAG, " Activity dispatchTouchEvent "+Util.getActioString(event));
+        if(event.getAction() ==MotionEvent.ACTION_UP){
+            Log.w("TAG", "ListenerActivity dispatchTouchEvent:");
+        }
         boolean b = super.dispatchTouchEvent(event);
         return b;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.e("TAG", " Activity onTouchEvent "+Util.getActioString(event));
+        Log.d(TAG, " Activity onTouchEvent "+Util.getActioString(event));
         boolean b = super.onTouchEvent(event);
         return b;
     }
