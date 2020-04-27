@@ -19,7 +19,13 @@ public class TestLinearLayout extends LinearLayout {
         boolean onInterceptTouchEvent = false;
         Log.w(TAG, "TestLinearLayout onInterceptTouchEvent-- action=" + Util.getActioString(event));
         // onInterceptTouchEvent = super.onInterceptTouchEvent(event);
-        onInterceptTouchEvent = true;
+        if (event.getAction() == MotionEvent.ACTION_DOWN ||
+                event.getAction() == MotionEvent.ACTION_UP) {
+            onInterceptTouchEvent = false;
+        } else {
+            onInterceptTouchEvent = true;
+        }
+
         return onInterceptTouchEvent;
     }
 

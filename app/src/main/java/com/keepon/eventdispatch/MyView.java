@@ -29,7 +29,7 @@ public class MyView extends View {
           getParent().requestDisallowInterceptTouchEvent(true);
             dispatchTouchEvent =  true;
         }else{
-            dispatchTouchEvent =  false;
+            dispatchTouchEvent =  true;
         }
         return dispatchTouchEvent;
 
