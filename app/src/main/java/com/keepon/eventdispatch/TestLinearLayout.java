@@ -28,7 +28,7 @@ public class TestLinearLayout extends LinearLayout {
         boolean dispatchTouchEvent = false;
         Log.w(TAG, "TestLinearLayout dispatchTouchEvent-- action=" + Util.getActioString(event));
         dispatchTouchEvent = super.dispatchTouchEvent(event);
-        Log.w(TAG, "TestLinearLayout dispatchTouchEvent-- action=" + Util.getActioString(event) +
+        Log.e(TAG, "TestLinearLayout dispatchTouchEvent-- action=" + Util.getActioString(event) +
                 "  返回dispatchTouchEvent=" + dispatchTouchEvent);
         return dispatchTouchEvent;
     }
@@ -39,7 +39,7 @@ public class TestLinearLayout extends LinearLayout {
         Log.w(TAG, "TestLinearLayout onTouchEvent-- action=" + Util.getActioString(event));
         // onTouchEvent = super.onTouchEvent(event);
         onTouchEvent = true;
-        Log.w(TAG, "TestLinearLayout onTouchEvent-- action=" + Util.getActioString(event) + "  " +
+        Log.e(TAG, "TestLinearLayout onTouchEvent-- action=" + Util.getActioString(event) + "  " +
                 "返回onTouchEvent=" + onTouchEvent);
         return onTouchEvent;
     }

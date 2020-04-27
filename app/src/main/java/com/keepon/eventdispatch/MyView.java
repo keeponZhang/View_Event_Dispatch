@@ -24,14 +24,13 @@ public class MyView extends View {
         boolean dispatchTouchEvent = false;
         Log.e(TAG, "MyView dispatchTouchEvent-- action=" + Util.getActioString(event));
         dispatchTouchEvent = super.dispatchTouchEvent(event);
-        // Log.e(TAG, "MyView dispatchTouchEvent-- return =" + dispatchTouchEvent);
-//        return dispatchTouchEvent;
-//         if(event.getAction()== MotionEvent.ACTION_DOWN){
-// //           getParent().requestDisallowInterceptTouchEvent(true);
-//             return true;
-//         }else{
-//             return false;
-//         }
+        if(event.getAction()== MotionEvent.ACTION_DOWN){
+            //让父控件不要拦截
+          getParent().requestDisallowInterceptTouchEvent(true);
+            dispatchTouchEvent =  true;
+        }else{
+            dispatchTouchEvent =  false;
+        }
         return dispatchTouchEvent;
 
     }
