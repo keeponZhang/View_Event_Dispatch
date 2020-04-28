@@ -14,6 +14,8 @@ public class Util {
             return "ACTION_MOVE";
         }else if(action ==MotionEvent.ACTION_UP){
             return "ACTION_UP";
+        }else if(action ==MotionEvent.ACTION_CANCEL){
+            return "ACTION_CANCEL";
         }
         return "";
     }

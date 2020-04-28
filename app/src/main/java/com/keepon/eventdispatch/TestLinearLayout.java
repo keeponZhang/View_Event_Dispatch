@@ -18,14 +18,12 @@ public class TestLinearLayout extends LinearLayout {
     public boolean onInterceptTouchEvent(MotionEvent event) {
         boolean onInterceptTouchEvent = false;
         Log.w(TAG, "TestLinearLayout onInterceptTouchEvent-- action=" + Util.getActioString(event));
-        onInterceptTouchEvent = super.onInterceptTouchEvent(event);
-        // if (event.getAction() == MotionEvent.ACTION_DOWN ||
-        //         event.getAction() == MotionEvent.ACTION_UP) {
-        //     onInterceptTouchEvent = false;
-        // } else {
-        //     onInterceptTouchEvent = true;
-        // }
-
+        // onInterceptTouchEvent = super.onInterceptTouchEvent(event);
+        if (event.getAction() == MotionEvent.ACTION_DOWN ) {
+            onInterceptTouchEvent = false;
+        } else {
+            onInterceptTouchEvent = true;
+        }
         return onInterceptTouchEvent;
     }
 
@@ -33,7 +31,13 @@ public class TestLinearLayout extends LinearLayout {
     public boolean dispatchTouchEvent(MotionEvent event) {
         boolean dispatchTouchEvent = false;
         Log.w(TAG, "TestLinearLayout dispatchTouchEvent-- action=" + Util.getActioString(event));
+        // if(event.getAction() ==MotionEvent.ACTION_MOVE){
+        //     dispatchTouchEvent = true;
+        // }else{
+        //     dispatchTouchEvent = super.dispatchTouchEvent(event);
+        // }
         dispatchTouchEvent = super.dispatchTouchEvent(event);
+
         Log.e(TAG, "TestLinearLayout dispatchTouchEvent-- action=" + Util.getActioString(event) +
                 "  返回dispatchTouchEvent=" + dispatchTouchEvent);
         return dispatchTouchEvent;
