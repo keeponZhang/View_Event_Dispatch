@@ -27,9 +27,9 @@ public class MyView extends View {
         if(event.getAction()== MotionEvent.ACTION_DOWN){
             //让父控件不要拦截
           getParent().requestDisallowInterceptTouchEvent(true);
-            dispatchTouchEvent =  true;
+        }else if(event.getAction()== MotionEvent.ACTION_MOVE){
+            getParent().requestDisallowInterceptTouchEvent(false);
         }else{
-            dispatchTouchEvent =  true;
         }
         return dispatchTouchEvent;
 
