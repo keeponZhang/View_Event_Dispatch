@@ -21,21 +21,21 @@ public class MyView extends View {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        boolean dispatchTouchEvent = true;
+        boolean dispatchTouchEvent = false;
         Log.e(TAG, "MyView dispatchTouchEvent-- action=" + Util.getActioString(event));
-        getParent().requestDisallowInterceptTouchEvent(true);
+        // getParent().requestDisallowInterceptTouchEvent(true);
         // dispatchTouchEvent = super.dispatchTouchEvent(event);
-        // if (event.getAction() == MotionEvent.ACTION_DOWN) {
-        //     //让父控件不要拦截
-        //     getParent().requestDisallowInterceptTouchEvent(true);
-        //     dispatchTouchEvent = true;
-        // } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-        //     getParent().requestDisallowInterceptTouchEvent(false);
-        //     dispatchTouchEvent = false;
-        // } else {
-        //     dispatchTouchEvent = true;
-        // }
-        return true;
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            //让父控件不要拦截
+            // getParent().requestDisallowInterceptTouchEvent(true);
+            dispatchTouchEvent = true;
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            // getParent().requestDisallowInterceptTouchEvent(false);
+            dispatchTouchEvent = false;
+        } else {
+            dispatchTouchEvent = false;
+        }
+        return dispatchTouchEvent;
 
     }
 
