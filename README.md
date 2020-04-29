@@ -2,19 +2,21 @@
 ### 要点
 * 1.dispatchTransformedTouchEvent 会递归调用，调用者必须是ViewGroup
   如果child不为null，则会调用该child的dispatchTouchEvent，一直递归下去。
-  假如现在是分发到了触摸到的最里层view的父亲viewGroup中，分两种情况
-  1.最后的child是view,这时会调到view的dispatchTouchEvent，然后是onTouchEvent方法（tips1)
+  假如现在是分发到了触摸到的最里层view的父容器viewGroup中，分两种情况
+  1.最后的child是view,这时会调到view的dispatchTouchEvent，然后是onTouchEvent方法（tips12_1)
   2.最后的child是viewGroup，这时会调到viewGroup的dispatchTouchEvent，然后child为null，
   接着dispatchTransformedTouchEvent，然后调用viewGroup父类view的dispatchTouchEvent，接着
-  调用viewGroup的onTouchEvent方法（多态）(tips2) 
+  调用viewGroup的onTouchEvent方法（多态）(tips12_2) 
   * 总结：事件从顶层view的的dispatchTouchEvent一层一层传到触摸到的最底层的view(view或者viewGroup)的dispatchTouchEvent，
-    如果是view会传到onTouchEvent,如果是viewgroup,首先会传到viewgroup的dispatchTouchEvent，在通过viewgroup的dispatchTransformedTouchEvent调用super.dispatchTouchEvent,从而传到viewgroup的onTouchEvent(前提是没有重写dispatchTouchEvent方法)
+    如果是view会传到onTouchEvent,如果是viewgroup,首先会传到viewgroup的dispatchTouchEvent，
+    在通过viewgroup的dispatchTransformedTouchEvent调用super.dispatchTouchEvent,从而传到viewgroup的onTouchEvent(前提是没有重写dispatchTouchEvent方法)
   ```java
   private boolean dispatchTransformedTouchEvent(MotionEvent event, boolean cancel,
             View child, int desiredPointerIdBits) {
         final boolean handled;
         if (child == null) {
-            //tips3:能走到这里，必定是viewGroup,然后调用viewGroup父类view的dispatchTouchEvent，接着
+            //源码11
+            //tips11_1:能走到这里，必定是viewGroup,然后调用viewGroup父类view的dispatchTouchEvent，接着
            // 调用viewGroup的onTouchEvent方法（多态）
             handled = super.dispatchTouchEvent(transformedEvent);
         } else {
@@ -24,12 +26,13 @@
             if (! child.hasIdentityMatrix()) {
                 transformedEvent.transform(child.getInverseMatrix());
             }
+             //源码12
             // 如果child不为null，则会调用该child的dispatchTouchEvent，一直递归下去 
             //如果这时走到最后一层了
-            //tips1:child为view，会调到view的dispatchTouchEvent，然后是onTouchEvent方法
-            //tips2：child为viewGroup，然后走到viewGroup的dispatchTouchEvent,
+            //tips12_1:child为view，会调到view的dispatchTouchEvent，然后是onTouchEvent方法
+            //tips12_2：child为viewGroup，然后走到viewGroup的dispatchTouchEvent,
             //继而走到viewgroup的dispatchTransformedTouchEvent（该方法，此时child为空），
-            // 走到tips3，最后走到该child（实际为viewGroup）的onTouchEvent
+            // 走到tips12_3，最后走到该child（实际为viewGroup）的onTouchEvent
             handled = child.dispatchTouchEvent(transformedEvent);
         }
         // Done.
@@ -37,10 +40,10 @@
         return handled;
     }`
   ```     
-* 2.加入的最后的child的dispatchTouchEvent返回false（直接调super一样(一般的view，继承自view，没有设置监听listener，
+* 2.假如最后的child的dispatchTouchEvent返回false（直接调super一样(一般的view，继承自view，没有设置监听listener，
   并且也不是CLICKABLE，dispatchTouchEvent调用的onTouchEvent返回false，从而dispatchTouchEvent返回false)），
   这时倒数第二层的ViewGroup的
-  dispatchTransformedTouchEvent会返回false，if里面的代码不会走，mFirstTouchTarget会等于null，这时代码走下去会继续调用
+  dispatchTransformedTouchEvent会返回false，源码4的if条件不满足，里面的代码不会走，mFirstTouchTarget会等于null，这时代码走下去会继续调用
   dispatchTransformedTouchEvent,此时传入的child是null,所以这时会调用viewGroup父类view的dispatchTouchEvent，接着
   调用viewGroup的onTouchEvent方法（多态）（接着会回溯上去，如果都是调super实现的话，
   最终会到顶层viewDevorView的onTouchEvent方法，再到Activity的onTouchEvent方法。（此时down事件走完）
@@ -50,9 +53,23 @@
              boolean handled = false;
              if (onFilterTouchEventForSecurity(ev)) {
              final boolean intercepted;
+             //源码0
+             if (actionMasked == MotionEvent.ACTION_DOWN) {
+                // Throw away all previous state when starting a new touch gesture.
+                // The framework may have dropped the up or cancel event for the previous gesture
+                // due to an app switch, ANR, or some other state change.
+                //tips0_1:down事件会重置FLAG_DISALLOW_INTERCEPT标志位，所以ViewGroup的onInterceptTouchEvent的download事件
+                //      返回了true，子view是收不到事件的
+                cancelAndClearTouchTargets(ev);
+                resetTouchState();
+            }
+
+             //源码1
+             //tips1_1:只有ACTION_DOWN或者mFirstTouchTarget != null，才有可能会调用onInterceptTouchEvent方法
              if (actionMasked == MotionEvent.ACTION_DOWN
                     || mFirstTouchTarget != null) {
                 final boolean disallowIntercept = (mGroupFlags & FLAG_DISALLOW_INTERCEPT) != 0;
+                 //源码2
                 if (!disallowIntercept) {
                     intercepted = onInterceptTouchEvent(ev);
                     ev.setAction(action); // restore action in case it was changed
@@ -62,13 +79,15 @@
              }else {
                 // There are no touch targets and this action is not an initial down
                 // so this view group continues to intercept touches.
-                //如果第一次没控件消费点击事件，mFirstTouchTarget ==null，up事件再次进来的话，intercepted返回true，然后走到tips4
+                //如果第一次没控件消费点击事件，mFirstTouchTarget ==null，
+                // up事件再次进来的话，intercepted返回true，然后走到源码5-1，调用super.dispatchTouchEvent
                  intercepted = true;
              }
 
             // Check for cancelation.
             final boolean canceled = resetCancelNextUpFlag(this)
                     || actionMasked == MotionEvent.ACTION_CANCEL;
+             //源码3      
             if (!canceled && !intercepted) {
                 if (actionMasked == MotionEvent.ACTION_DOWN
                         || (split && actionMasked == MotionEvent.ACTION_POINTER_DOWN)
@@ -95,8 +114,9 @@
                                 continue;
                             }
                             resetCancelNextUpFlag(child);
-                            //加入的最后的child的dispatchTouchEvent返回false（直接调super一样），这时倒数第二层的ViewGroup的
-                            //dispatchTransformedTouchEvent会返回false,mFirstTouchTarget为null,此时走到tips4
+                            //源码4
+                            //假如最后的child的dispatchTouchEvent返回false（直接调super一样），这时倒数第二层的ViewGroup的
+                            //dispatchTransformedTouchEvent会返回false,mFirstTouchTarget为null,此时走到源码5-1
                             if (dispatchTransformedTouchEvent(ev, false, child, idBitsToAssign)) {
                                 // Child wants to receive touch within its bounds.
                                 mLastTouchDownTime = ev.getDownTime();
@@ -132,13 +152,14 @@
                 }
             }
 
-            // Dispatch to touch targets.
+            //源码5
             //mFirstTouchTarget == null的可能性
-            //1.子控件不消费，dispatchOnTouchEvent返回false
-            //2,子控件返回了true，down事件是mFirstTouchTarget不为null，但是到了move事件时，父容器拦截了，在tips4.1由重新置为了null
+            //tips5_1.子控件不消费，dispatchOnTouchEvent返回false
+            //tips5_2,子控件返回了true，down事件是mFirstTouchTarget不为null，但是到了move事件时，父容器拦截了，在源码7-1由重新置为了null
             if (mFirstTouchTarget == null) {
                 // No touch targets so treat this as an ordinary view.
-                //tips4:mFirstTouchTarget为null,此时又再一次调用viewGroup的dispatchTransformedTouchEvent，child为null，接着走的是要点1的tips3，调用viewGroup的onTouchEvent方法（多态）
+                //源码5-1:mFirstTouchTarget为null,此时又再一次调用viewGroup的dispatchTransformedTouchEvent，child为null，
+                // 接着走的是要点1的tips3，调用viewGroup的onTouchEvent方法（多态）
                 //dispatchTouchEvent 和 onTouchEvent return false的时候事件都回传给父控件的onTouchEvent处理。
                 handled = dispatchTransformedTouchEvent(ev, canceled, null,
                         TouchTarget.ALL_POINTER_IDS);
@@ -149,9 +170,11 @@
                 TouchTarget target = mFirstTouchTarget;
                 while (target != null) {
                     final TouchTarget next = target.next;
+                     //源码6
                     if (alreadyDispatchedToNewTouchTarget && target == newTouchTarget) {
                         handled = true;
                     } else {
+                         //源码7
                         final boolean cancelChild = resetCancelNextUpFlag(target.child)
                                 || intercepted;
                         if (dispatchTransformedTouchEvent(ev, cancelChild,
@@ -159,7 +182,7 @@
                             handled = true;
                         }
                         if (cancelChild) {
-                            //tips4.1
+                            //源码7-1
                             if (predecessor == null) {
                                 mFirstTouchTarget = next;
                             } else {
@@ -176,11 +199,13 @@
             }
 
             // Update list of touch targets for pointer up or cancel, if needed.
+            //源码8
             if (canceled
                     || actionMasked == MotionEvent.ACTION_UP
                     || actionMasked == MotionEvent.ACTION_HOVER_MOVE) {
                 resetTouchState();
             } else if (split && actionMasked == MotionEvent.ACTION_POINTER_UP) {
+            //源码9
                 final int actionIndex = ev.getActionIndex();
                 final int idBitsToRemove = 1 << ev.getPointerId(actionIndex);
                 removePointersFromTouchTargets(idBitsToRemove);
@@ -193,13 +218,14 @@
         return handled;
     }
      ```
-* 3.加入的最后的child的dispatchTouchEvent返回true，这时倒数第二层的ViewGroup的
-    dispatchTransformedTouchEvent会返回true，if里面的代码会走，mFirstTouchTarget就不为null，这时代码走下去，handled为true，
-    接着会回溯上去（倒数第二层的mFirstTouchTarget为倒数第一层的view，倒数第三层的mFirstTouchTarget为倒数第二层的view（倒数第三层handled也为true））
+* 3.假如最后的child的dispatchTouchEvent返回true，这时倒数第二层的ViewGroup的
+  dispatchTransformedTouchEvent会返回true，源码4的if条件满足，if里面的代码会走，mFirstTouchTarget就不为null，这时代码走下去，handled为true，
+  接着会回溯上去（倒数第二层的mFirstTouchTarget为倒数第一层的view，倒数第三层的mFirstTouchTarget为倒数第二层的view（倒数第三层handled也为true））
   * 结论1：dispatchTouchEvent 和 onTouchEvent 一旦return
     true,事件就停止传递了（到达终点）（没有谁能再收到这个事件）。
     看下图中只要return true事件就没再继续传下去了，对于return
-    true我们经常说事件被消费了，消费了的意思就是事件走到这里就是终点，不会往下传，没有谁能再收到这个事件了（此时down事件不会传到父容器的onTouchEvent中）,接下来的事件会继续走到该viewGroup的dispatchTouchEvent方法,传到tips6，接着传给下一层view（mFirstTarget)处理
+    true我们经常说事件被消费了，消费了的意思就是事件走到这里就是终点，不会往下传，没有谁能再收到这个事件了（此时down事件不会传到父容器的onTouchEvent中）,
+    接下来的事件会继续走到该viewGroup的dispatchTouchEvent方法,传到tips6，接着传给下一层view（mFirstTarget)处理
     （这里有一个注意点，同一个view,onTouchEvent返回true,如果dispatchTouchEvent方法返回调用的是super.dispatchTouchEvent,这dispatchTouchEvent也会返回true,其他情况则不一定）
      ```java
           public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -250,11 +276,12 @@
                                 continue;
                             }
                             resetCancelNextUpFlag(child);
-                            //加入的最后的child的dispatchTouchEvent返回true，这时倒数第二层的ViewGroup的
-                             //dispatchTransformedTouchEvent会返回true，mFirstTouchTarget不为null，走到tips5
-                             
-                             //这里如果是TestLinerLayout返回了的dispatchTouchEvent返回true，
-                             // 会回调（FrameLayout(android:id.content),此时的FrameLayout的mFirstTarget还没赋值，child是TestLinearLayout,也会走addTouchTarget，
+                            //源码4
+                            //tips4_1:假如最后的child的dispatchTouchEvent返回true，这时倒数第二层的ViewGroup的
+                             //dispatchTransformedTouchEvent会返回true，mFirstTouchTarget不为null，走到源码6
+                             //举例:这里如果是TestLinerLayout返回了的dispatchTouchEvent返回true，
+                             // 会回调到（FrameLayout(android:id.content)的dispatchTouchEvent方法，执行到该行,
+                             // 此时的FrameLayout的mFirstTarget还没赋值，child是TestLinearLayout,也会走addTouchTarget，
                             //很明显此时mFirstTouchTarget会被赋值为TestLinearLayout
                             if (dispatchTransformedTouchEvent(ev, false, child, idBitsToAssign)) {
                                 // Child wants to receive touch within its bounds.
@@ -272,7 +299,7 @@
                                 }
                                 //mFirstTouchTarget被赋值了
                                 newTouchTarget = mFirstTouchTarget= addTouchTarget(child, idBitsToAssign);
-                                //tips4.1
+                                //tips4.2
                                 alreadyDispatchedToNewTouchTarget = true;
                                 break;
                             }
@@ -291,7 +318,7 @@
                     }
                 }
             }
-
+            //源码5
             // mFirstTouchTarget其实是在Action_Down是确定的
            //tips5.1
             //mFirstTouchTarget == null的可能性
@@ -305,22 +332,30 @@
                 TouchTarget target = mFirstTouchTarget;
                 while (target != null) {
                     final TouchTarget next = target.next;
-                    //tips5:情况1此时是action_down，并且子控件返回true，alreadyDispatchedToNewTouchTarget为true，target == newTouchTarget，所以此时handled为true
+                     //源码6
+                    //tips6_1:此时是action_down，并且子控件返回true，alreadyDispatchedToNewTouchTarget为true，target == newTouchTarget，所以此时handled为true
                     //接着会回溯上去（倒数第二层的mFirstTouchTarget为倒数第一层的view，倒数第三层的mFirstTouchTarget为倒数第二层的view（倒数第三层handled也为true））
                     if (alreadyDispatchedToNewTouchTarget && target == newTouchTarget) {
+                    //源码6-1
                         handled = true;
                     } else {
-                        //情况2：此时如果是action_move或者action_up,TouchTarget newTouchTarget = null,alreadyDispatchedToNewTouchTarget = false;
-                        //target=mFirstTouchTarget,可知如果父容器拦截了action_move或者action_up事件，intercepted为true，子控件会收到cancel事件,否则会继续通过dispatchTransformedTouchEvent方法，把事件传给子控件，一层一层传下去
-                        //tips6
+                        //源码7
+                        //tips7_1：此时如果是action_move或者action_up, newTouchTarget = null(每个事件都会被初始化),
+                        // alreadyDispatchedToNewTouchTarget = false;
+                        //target=mFirstTouchTarget,可知如果父容器拦截了action_move或者action_up事件，intercepted为true，子控件会收到cancel事件,
+                        // 否则会继续通过dispatchTransformedTouchEvent方法，把事件传给子控件，一层一层传下去
                         final boolean cancelChild = resetCancelNextUpFlag(target.child)
                                 || intercepted;
                         //这里有一点注意，如果父容器没拦截down事件，拦截up事件，如果子控件对cancel事件消费了，handle仍然会被置为true
+                        //tips7_2：cancel事件时这里分发的，cancelChild为true时，这里就是给子view发cancel事件
                         if (dispatchTransformedTouchEvent(ev, cancelChild,
                                 target.child, target.pointerIdBits)) {
                             handled = true;
                         }
-                        //父容器如果拦截，mFirstTouchTarget会置为null，下次进来走tips4，其实就是会走到viewGroup的onTouchEvent方法
+                        //tips7_3：
+                        // 父容器如果已经给子view分发了cancel事件，
+                         //mFirstTouchTarget会置为null，下次进来走源码5
+                        // 其实就是会走到viewGroup的super.dispatchTouchEvent,从而是ViewGroup.onTouchEvent方法
                         if (cancelChild) {
                             if (predecessor == null) {
                                 mFirstTouchTarget = next;
@@ -359,19 +394,23 @@
 ### 总结
 * 1.某个View 一旦决定拦截(onInterceptTouchEvent 返回true)，那么这
   一个事件序列都只能由它来处理〈如果事件序列能够传递给它的话），
-  并且它的onInterceptTouchEvent不会再被调用（因为此时拦截了down事件，mFirstTarget为null）
-* 2.加入的最后的child的dispatchTouchEvent返回true,一般来说，父容器就不走onTouchEvent?有没办法实现走父容器的onTouchEvent呢?
-  有，在父容器的onInterceptTouchEvent方法返回true.此时newTouchTarget =
-  null,alreadyDispatchedToNewTouchTarget =
-  false;因为父容器拦截，会给子view（mFirstTarget）分发一个cancel事件，如果是只是个点击事件，其实该viewgroup并不会走onTouchEvent；如果中间还有move事件，因为第一个move事件，mFirsTarget
-  就被置为null，接下来的事件会分发给父容器的onTouchEvent. 
-  
+  并且它的onInterceptTouchEvent不会再被调用（因为此时拦截了down事件，mFirstTarget为null），可参看tips1_1。
+* 2.假如最后的child的dispatchTouchEvent返回true,一般来说，父容器就不走onTouchEvent?有没办法实现走父容器的onTouchEvent呢?
+  有，在父容器的onInterceptTouchEvent方法返回true.此时子view是直接收不到任何事件。
+* 2_1.ViewGroup的onInterceptTouchEvent的down返回了false，其他返回了true，View的dispatchTouchEvent返回true。
+  如果是只是个点击事件：down事件毫无疑问会传到MyView，up事件时，因为父容器拦截onInterceptTouchEvent返回true，所以此时newTouchTarget
+  = null,alreadyDispatchedToNewTouchTarget
+  =false;走到源码7，cancelChild为true，会给子view（mFirstTarget）分发一个cancel事件，此时并不会走viewgroup并不会走onTouchEvent，
+  并且handle仍然会被置为true。 如果包含事件：因为第一个move事件，mFirsTarget
+  就被置为null，第一个move事件handle仍然会被置为true，第一个move事件不会调用onTouchEvent，但是接下来的事件会分发给viewgroup的onTouchEvent.
 * 3.父容器的onInterceptTouchEvent返回true，表示父容器拦截了事件，子view就再也收不到事件，有没办法在该情况下，子view也能受到事件呢？
   有的，但是有一个前提，父容器不能拦截actionDown事件，因为父容器拦截actionDown后，事件走不到子view中(因为你在action_down事件前设置的不允许父容器拦截标志位，会在actiondown中被重置）
   所以一般做法是在父容器onInterceptTouchEvent方法中，如果actionDown事件返回false，其他事件返回true。然后在子view的dispatchTouchEvent的actionDown调用
   getParent().requestDisallowInterceptTouchEvent(true)，true表示不允许父控件拦截。
-  (注意，如果子view消费了down事件，并且子view没有调用getParent().requestDisallowInterceptTouchEvent(true)方法，子view不会收到ove
-  和up事件，会收到cancel事件)
+  假如现在父容器在onInterceptTouchEvent的down事件返回false，其他返回true.
+  情况1:子view消费了down事件,但是没有调用getParent().requestDisallowInterceptTouchEvent(true)方法，子view不会收到move
+  和up事件，会收到cancel事件(与情况2_1一致)
+  情况2:子view消费了down事件,也调用getParent().requestDisallowInterceptTouchEvent(true)，子view会收到接下来的事件
 * 4.view事件分发给自己的onTouchEvent 处理呢，那只能return
   super.dispatchTouchEvent,View类的dispatchTouchEvent（）方法默认实现就是能帮你调用View自己的onTouchEvent方法的。
   然后ViewGroup怎样通过dispatchTouchEvent方法能把事件分发到自己的onTouchEvent处理呢，return
