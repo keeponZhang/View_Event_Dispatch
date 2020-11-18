@@ -17,7 +17,8 @@ public class TestLinearLayout extends LinearLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         boolean onInterceptTouchEvent = false;
-        Log.w(TAG, "TestLinearLayout onInterceptTouchEvent-- action=" + Util.getActioString(event));
+        Log.w(TAG, "TestLinearLayout onInterceptTouchEvent-- action=" + Util.getActioString(event)+
+                getSuperBeforeString());
         onInterceptTouchEvent = super.onInterceptTouchEvent(event);
         // if (event.getAction() == MotionEvent.ACTION_DOWN ) {
         //     onInterceptTouchEvent = false;
@@ -30,7 +31,8 @@ public class TestLinearLayout extends LinearLayout {
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         boolean dispatchTouchEvent = false;
-        Log.w(TAG, "TestLinearLayout dispatchTouchEvent-- action=" + Util.getActioString(event));
+        Log.w(TAG, "TestLinearLayout dispatchTouchEvent-- action=" + Util.getActioString(event)+
+                getSuperBeforeString());
         // if(event.getAction() ==MotionEvent.ACTION_MOVE){
         //     dispatchTouchEvent = true;
         // }else{
@@ -46,13 +48,16 @@ public class TestLinearLayout extends LinearLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean onTouchEvent = false;
-        Log.w(TAG, "TestLinearLayout onTouchEvent-- action=" + Util.getActioString(event));
+        Log.w(TAG, "TestLinearLayout onTouchEvent-- action=" + Util.getActioString(event)+
+                getSuperBeforeString());
         onTouchEvent = super.onTouchEvent(event);
         // onTouchEvent = true;
         Log.e(TAG, "TestLinearLayout onTouchEvent-- action=" + Util.getActioString(event) + "  " +
                 "返回onTouchEvent=" + onTouchEvent);
         return onTouchEvent;
     }
-
+    public String getSuperBeforeString(){
+        return "----------调用super前";
+    }
 
 }

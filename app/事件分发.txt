@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.keepon.eventdispatch.TestLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:tag="TestLinearLayout"
+              android:id="@+id/mylayout">
+	<com.keepon.eventdispatch.TestButton
+		android:enabled="false"
+		android:id="@+id/my_btn"
+		android:tag="TestButton"
+		android:textAllCaps="false"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="click TestButton"/>
+	<com.keepon.eventdispatch.MyView
+		android:id="@+id/myview"
+		android:tag="MyView"
+		android:layout_marginTop="20dp"
+		android:background="@color/material_blue_grey_800"
+		android:layout_width="match_parent"
+		android:layout_height="35dp"
+		android:text="click MyView"/>
+	<TextView
+		android:background="@color/button_material_light"
+		android:layout_marginTop="20dp"
+		android:id="@+id/tv"
+		android:tag="TextView"
+		android:gravity="center"
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
+		android:text="click TextView"/>
+	<LinearLayout
+		android:orientation="horizontal"
+		android:id="@+id/ll_test"
+		android:layout_marginTop="10dp"
+		android:background="#f00"
+		android:layout_width="match_parent"
+		android:layout_height="50dp"></LinearLayout>
+</com.keepon.eventdispatch.TestLinearLayout>
+
+1.      04-27 10:33:49.540 7988-7988/com.yanbober.eventdispatch D/事件拦截:  Activity dispatchTouchEvent ACTION_DOWN
+	04-27 10:33:49.540 7988-7988/com.yanbober.eventdispatch W/事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN
+	04-27 10:33:49.540 7988-7988/com.yanbober.eventdispatch E/事件拦截: DevorView OnTouchListener--onTouch-- action=ACTION_DOWN
+	04-27 10:33:49.541 7988-7988/com.yanbober.eventdispatch D/事件拦截:  Activity onTouchEvent ACTION_DOWN
+	04-27 10:33:49.597 7988-7988/com.yanbober.eventdispatch D/事件拦截:  Activity dispatchTouchEvent ACTION_UP
+	04-27 10:33:49.597 7988-7988/com.yanbober.eventdispatch E/事件拦截: DevorView OnTouchListener--onTouch-- action=ACTION_UP
+	04-27 10:33:49.597 7988-7988/com.yanbober.eventdispatch D/事件拦截:  Activity onTouchEvent ACTION_UP
+	TestLinearLayout 的dispatch返回false，一层层回溯上去，此时每个ViewGroup的mFirstTarget都是null，当up事件，
+	分发给顶层Decorview的dispatchTransformedTouchEvent，从而调用View(此时View是Decorview)的dispatchTouchEvent,
+	然后调用OnTouchListener,因为OnTouchListener也返回false,所以接着会调用Decorview的onToucheEvent方法（没法重写，所有没法打印日志）
+	（其实DecorView的onTouchEvent方法调用了onInterceptTouchEvent）
+
+2.      事件拦截:  Activity dispatchTouchEvent ACTION_DOWN
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onInterceptTouchEvent-- action=ACTION_DOWN
+	事件拦截: MyView dispatchTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_DOWN
+	事件拦截:  Activity onTouchEvent ACTION_DOWN
+	事件拦截:  Activity dispatchTouchEvent ACTION_UP
+	事件拦截:  Activity onTouchEvent ACTION_UP
+
+	MyView的dispatchTouchEvent返回false,会调用父容器(TestLinearLayout）的onTouchEvent方法，
+	MyView的onTouchEvent返回false，也会调用父容器(TestLinearLayout）的onTouchEvent方法，
+	两者的区别是MyView的dispatchTouchEvent调用了super.dispatchTouchEvent的
+	话，会调用MyView的的onTouchEvent方法
+
+3.      事件拦截:  Activity dispatchTouchEvent ACTION_DOWN
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onInterceptTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_DOWN  返回onTouchEvent=false
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN  返回dispatchTouchEvent=false
+	事件拦截:  Activity onTouchEvent ACTION_DOWN
+	事件拦截:  Activity dispatchTouchEvent ACTION_UP
+	事件拦截:  Activity onTouchEvent ACTION_UP
+
+	TestLinearLayout 的onInterceptTouchEvent返回true,其他的默认不变，可知，onInterceptTouchEvent方法后直接调用了
+	TestLinearLayout 的onTouchEvent方法，由于TestLinearLayout 的onTouchEvent返回false，导致TestLinearLayout 的dispatchTouchEvent
+	的返回false，所以也表示不消费，回溯上去，最终的Up事件不会再传下来。
+	(拦截其实跟child返回false是一样的，都会导致mFirstTouchTarget == null，
+	如果TestLinearLayout消费的话，区别就是，这个会表示消费，TestLinearLayout的父容器的mFirstTouchTarget有了值，否则没区别)
+
+4.     事件拦截:  Activity dispatchTouchEvent ACTION_DOWN
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onInterceptTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_DOWN  返回onTouchEvent=true
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN  返回dispatchTouchEvent=true
+	事件拦截:  Activity dispatchTouchEvent ACTION_UP
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_UP
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_UP
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_UP  返回onTouchEvent=true
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_UP  返回dispatchTouchEvent=true
+
+	1.TestLinearLayout 的onInterceptTouchEvent返回true，onTouchEvent返回true，表示既拦截又消费，可知MyView还是不会收到事件，
+	因为已经被TestLinearLayout拦截了，TestLinearLayout 的onInterceptTouchEvent值在Down事件被调用了一次。其实这个也好理解，就是
+	说当一个View决定拦截一个事件后，那么系统会把同一个事件序列内的其他事件都交给它处理，因此也就不用调用者这个View的onInterceptTouchEvent
+	方法去询问它是否拦截。
+	2.这里Activity的onTouchEvent 没有被调用，因为事件已经被消费了，没有被回溯回去。（此时Activity的getWindow().superDispatchTouchEvent(ev)返回true，
+	不会调用Activity的onTouchEvent）
+5.   事件拦截:  Activity dispatchTouchEvent ACTION_DOWN
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onInterceptTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_DOWN  返回onTouchEvent=true
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN  返回dispatchTouchEvent=true
+	事件拦截:  Activity dispatchTouchEvent ACTION_UP
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_UP
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_UP
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_UP  返回onTouchEvent=true
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_UP  返回dispatchTouchEvent=true
+
+	TestLinearLayout  在onInterceptTouchEvent返回了true，拦截了所有事件包括down事件，
+	此时子view无论如何是收不到事件的，即使MyView调用了getParent().requestDisallowInterceptTouchEvent(true);
+	因为这个标志位在Down时会被重置 ，此时final boolean disallowIntercept = (mGroupFlags & FLAG_DISALLOW_INTERCEPT) != 0;
+	disallowIntercept  = false，if (!disallowIntercept) {intercepted = onInterceptTouchEvent(ev);}，会走onInterceptTouchEvent方法，
+	然后父控件又是拦截的，intercepted= true；就不会走到if (!canceled && !intercepted)判断里面，所以没有办法传给MyView
+6.  事件拦截:  Activity dispatchTouchEvent ACTION_DOWN
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onInterceptTouchEvent-- action=ACTION_DOWN
+	事件拦截: MyView dispatchTouchEvent-- action=ACTION_DOWN
+	事件拦截: MyView onTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN  返回dispatchTouchEvent=true
+	事件拦截:  Activity dispatchTouchEvent ACTION_UP
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_UP
+	事件拦截: MyView dispatchTouchEvent-- action=ACTION_UP
+	事件拦截: MyView onTouchEvent-- action=ACTION_UP
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_UP  返回dispatchTouchEvent=true
+
+	TestLinearLayout.onInterceptTouchEvent
+	if (event.getAction() == MotionEvent.ACTION_DOWN ||
+	                event.getAction() == MotionEvent.ACTION_UP) {
+	            onInterceptTouchEvent = false;
+	        } else {
+	            onInterceptTouchEvent = true;
+	  }
+
+	MyView.dispatchTouchEvent
+	if(event.getAction()== MotionEvent.ACTION_DOWN){
+	            //让父控件不要拦截
+	          getParent().requestDisallowInterceptTouchEvent(true);
+	            dispatchTouchEvent =  true;
+	        }else{
+	            dispatchTouchEvent =  true;
+	        }
+
+	这个叫外部拦截法，父容器的ActionDown必须返回false，actionUp也返回false(后面会说为什么)。
+	1此时TestLinearLayout的 dispatchTouchEvent会收到download和up事件，但是不会调用TestLinearLayout的onTouchEvent(子控件消费了事件)
+	2.TestLinearLayout的onInterceptTouchEvent只有在down时被调用，up时没有被调用（子控件请求父控件不要拦截，所以即使这时候mFirstTarget!=null,也不会走onInterceptTouchEvent），
+	MyView在dispatchTouchEvent的down返回true，导致TestLinearLayoutmFirstTouchTarget != null
+	，但是又因为  MyView调用getParent().requestDisallowInterceptTouchEvent(true)，使disallowIntercept返回true，
+	不走onInterceptTouchEvent，并且 intercepted = false;alreadyDispatchedToNewTouchTarget=false，走2106的dispatchTransformedTouchEvent方法，
+	把up事件给MyView传下去，TouchTarget target = mFirstTouchTarget，childe =target.child,
+	正是通过mFirstTouchTarget标记的child	（走mFirstTarget!=null分支，把事件传下去）
+7.      事件拦截:  Activity dispatchTouchEvent ACTION_DOWN
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onInterceptTouchEvent-- action=ACTION_DOWN
+	事件拦截: MyView dispatchTouchEvent-- action=ACTION_DOWN
+	事件拦截: MyView onTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onTouchEvent-- action=ACTION_DOWN  返回onTouchEvent=false
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN  返回dispatchTouchEvent=false
+	事件拦截:  Activity onTouchEvent ACTION_DOWN
+	事件拦截:  Activity dispatchTouchEvent ACTION_UP
+	事件拦截:  Activity onTouchEvent ACTION_UP
+
+	  @Override
+	    public boolean dispatchTouchEvent(MotionEvent event) {
+	        boolean dispatchTouchEvent = false;
+	        Log.e(TAG, "MyView dispatchTouchEvent-- action=" + Util.getActioString(event));
+	        dispatchTouchEvent = super.dispatchTouchEvent(event);
+	        if(event.getAction()== MotionEvent.ACTION_DOWN){
+	            //让父控件不要拦截
+	          getParent().requestDisallowInterceptTouchEvent(true);
+	        }else if(event.getAction()== MotionEvent.ACTION_MOVE){
+	            getParent().requestDisallowInterceptTouchEvent(false);
+	        }else{
+	        }
+	        return dispatchTouchEvent;
+
+	    }
+	1子控件调用  getParent().requestDisallowInterceptTouchEvent(true);但是又不消费改事件，是没有什么意义的，
+	接下来的事件不会继续传下来
+8.  事件拦截:  Activity dispatchTouchEvent ACTION_DOWN
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout onInterceptTouchEvent-- action=ACTION_DOWN
+	事件拦截: MyView dispatchTouchEvent-- action=ACTION_DOWN
+	事件拦截: MyView onTouchEvent-- action=ACTION_DOWN
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN  返回dispatchTouchEvent=true
+	事件拦截:  Activity dispatchTouchEvent ACTION_MOVE
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_MOVE
+	事件拦截: MyView dispatchTouchEvent-- action=ACTION_MOVE
+	事件拦截: MyView onTouchEvent-- action=ACTION_MOVE
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_MOVE  返回dispatchTouchEvent=false
+	事件拦截:  Activity onTouchEvent ACTION_MOVE
+	事件拦截:  Activity dispatchTouchEvent ACTION_UP
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_UP
+	事件拦截: TestLinearLayout onInterceptTouchEvent-- action=ACTION_UP
+	事件拦截: MyView dispatchTouchEvent-- action=ACTION_CANCEL
+	事件拦截: MyView onTouchEvent-- action=ACTION_CANCEL
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_UP  返回dispatchTouchEvent=true
+	事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_UP  返回dispatchTouchEvent=true
+
+	MyView
+	 public boolean dispatchTouchEvent(MotionEvent event) {
+	        boolean dispatchTouchEvent = false;
+	        Log.e(TAG, "MyView dispatchTouchEvent-- action=" + Util.getActioString(event));
+	        dispatchTouchEvent = super.dispatchTouchEvent(event);
+	        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+	            //让父控件不要拦截
+	            getParent().requestDisallowInterceptTouchEvent(true);
+	            dispatchTouchEvent = true;
+	        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+	            getParent().requestDisallowInterceptTouchEvent(false);
+	            dispatchTouchEvent = false;
+	        } else {
+	            dispatchTouchEvent = true;
+	        }
+	        return dispatchTouchEvent;
+
+	    }
+	TestLinearLayout
+	 @Override
+	    public boolean onInterceptTouchEvent(MotionEvent event) {
+	        boolean onInterceptTouchEvent = false;
+	        Log.w(TAG, "TestLinearLayout onInterceptTouchEvent-- action=" + Util.getActioString(event));
+	        // onInterceptTouchEvent = super.onInterceptTouchEvent(event);
+	        if (event.getAction() == MotionEvent.ACTION_DOWN ) {
+	            onInterceptTouchEvent = false;
+	        } else {
+	            onInterceptTouchEvent = true;
+	        }
+	        return onInterceptTouchEvent;
+	    }
+	     final boolean cancelChild = resetCancelNextUpFlag(target.child)
+                                || intercepted;
+		if (dispatchTransformedTouchEvent(ev, cancelChild,
+                                target.child, target.pointerIdBits)) {
+                            handled = true;
+                     }
+		if (cancelChild) {
+                            if (predecessor == null) {
+                                mFirstTouchTarget = next;
+                            } else {
+                                predecessor.next = next;
+                            }
+                            target.recycle();
+                            target = next;
+                            continue;
+                  }
+	1.MyView对Move事件不感兴趣，TestLinearLayout 拦截Down事件
+	 这里有几个点注意
+	1.TestLinearLayout在第一个Move事件不会调用onInterceptTouchEvent方法，因为此时mFirstTouchTarget != null并且disallowIntercept为true
+	2.MyView只会受到第一个Move事件，然后会收到Cancel事件（down事件被消费了，所以mFirstToucheTarget！=null并且down事件请求了父控件不要拦截，
+	此时intercepted=false，第一个move事件会传下来，第一个move事件传到myView后， getParent().requestDisallowInterceptTouchEvent(false);此时虽然mFirstTouchTarget！=null，
+	但是onInterceptTouchEvent会走，intercepted=false，所以给myView传了cancel事件，并且mFirstTouchTarget置为null）
+	3.onInterceptTouchEvent方法会调用，一个是在down事件，此时一定会调用，一个是mFirstTouchTarget!=null并且子控件不请求父控件不要拦截
+	4.为什么控件拦截后onInterceptTouchEvent不会再调用呢，因为此时mFirstTouchTarget==null并且不是down事件
+
+8.      2020-11-18 16:54:57.118 929-929/com.yanbober.eventdispatch D/事件拦截:  Activity dispatchTouchEvent ACTION_DOWN
+	2020-11-18 16:54:57.119 929-929/com.yanbober.eventdispatch W/事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN----------调用super前
+	2020-11-18 16:54:57.119 929-929/com.yanbober.eventdispatch W/事件拦截: TestLinearLayout onInterceptTouchEvent-- action=ACTION_DOWN----------调用super前
+	2020-11-18 16:54:57.120 929-929/com.yanbober.eventdispatch D/事件拦截: TestButton dispatchTouchEvent:ACTION_DOWN
+	2020-11-18 16:54:57.120 929-929/com.yanbober.eventdispatch D/事件拦截: TestButton onTouchEvent -- action=ACTION_DOWN
+	2020-11-18 16:54:57.126 929-929/com.yanbober.eventdispatch E/事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_DOWN  返回dispatchTouchEvent=true
+	2020-11-18 16:54:57.207 929-929/com.yanbober.eventdispatch D/事件拦截:  Activity dispatchTouchEvent ACTION_UP
+	2020-11-18 16:54:57.207 929-929/com.yanbober.eventdispatch W/事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_UP----------调用super前
+	2020-11-18 16:54:57.208 929-929/com.yanbober.eventdispatch W/事件拦截: TestLinearLayout onInterceptTouchEvent-- action=ACTION_UP----------调用super前
+	2020-11-18 16:54:57.208 929-929/com.yanbober.eventdispatch D/事件拦截: TestButton dispatchTouchEvent:ACTION_UP
+	2020-11-18 16:54:57.208 929-929/com.yanbober.eventdispatch D/事件拦截: TestButton onTouchEvent -- action=ACTION_UP
+	2020-11-18 16:54:57.209 929-929/com.yanbober.eventdispatch E/事件拦截: TestLinearLayout dispatchTouchEvent-- action=ACTION_UP  返回dispatchTouchEvent=false
+	2020-11-18 16:54:57.209 929-929/com.yanbober.eventdispatch D/事件拦截:  Activity onTouchEvent ACTION_UP
+	2020-11-18 16:54:57.213 929-929/com.yanbober.eventdispatch E/事件拦截: TestButtom OnClickListener--onClick-- action=
+
+	1.在MyView的dispatchTouchEvent的down返回true，其他的返回false，事件还是会给MyView，因为父容器没有拦截，mFirstTouchTarget一直不等于null，事件会一直传下去

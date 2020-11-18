@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -57,13 +58,23 @@ public class ListenerActivity extends Activity
 //        mButton.setOnTouchListener(this);
 
 //        mButton.getParent().requestDisallowInterceptTouchEvent(false);
-//         getWindow().getDecorView().setOnTouchListener(this);
+        getWindow().getDecorView().setOnTouchListener(this);
         // getWindow().setCallback(getCallback());
 //        mButton.setOnTouchListener(this);
 
 //        mLayout.setOnClickListener(this);
         mButton.setOnClickListener(this);
         mButton.setTag("TestButtom");
+        getWindow().getDecorView()
+                .setTouchDelegate(new TouchDelegate(null, getWindow().getDecorView()) {
+                    @Override
+                    public boolean onTouchEvent(MotionEvent event) {
+                        Log.w(TAG,
+                                "DevorView onTouchEvent 在decorview里面调用的  " +
+                                        "TouchDelegate:" + Util.getActioString(event));
+                        return super.onTouchEvent(event);
+                    }
+                });
     }
 
     private Window.Callback getCallback() {
@@ -192,7 +203,7 @@ public class ListenerActivity extends Activity
         if (v.getTag() != null) {
             Log.e(TAG, v.getTag() + " OnClickListener--onClick-- action=");
         }
-        Toast.makeText(this, "click", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, v.getTag() + " click", Toast.LENGTH_LONG).show();
     }
 
     @Override
